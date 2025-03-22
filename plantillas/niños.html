@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catálogo Adidas Mujeres</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa; }
+        .navbar { background-color: #000; }
+        .navbar-brand img { width: 100px; }
+        .navbar-nav .nav-link { color: #fff !important; }
+        .cart-icon { color: white; font-size: 1.5rem; }
+        .cart-count { background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.8rem; }
+        .card { border: none; transition: transform 0.3s; }
+        .card:hover { transform: scale(1.05); }
+        .price { color: #28a745; font-weight: bold; }
+        .btn-comprar { background-color: #000; color: white; border-radius: 20px; width: 100%; }
+        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); }
+        .cart-content { background: white; width: 50%; margin: 10% auto; padding: 20px; border-radius: 10px; }
+        .close-btn { float: right; cursor: pointer; font-size: 24px; }
+        .cart-item img { width: 50px; height: auto; margin-right: 10px; }
+        .cart-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .banner {
+            background: url('https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_1920,w_1920/CONTENT_adi_Club_Benefits_STATEMENT_BANNER_DT_3_f216e0df87.jpg') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Adidas_logo.png" alt="Adidas"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+                     <li><a class="nav-link" href="{% url 'hombres' %}"> Hombres</a></li>
+
+                    <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="verCarrito()">
+                            <i class="bi bi-cart cart-icon"></i> <span id="cart-count" class="cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+     <div class="banner">
+        Ropa Especializada para niños
+    </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Productos Adidas Niños</h2>
+        <div class="row" id="productos-container"></div>
+    </div>
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <span class="close-btn" onclick="cerrarCarrito()">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <ul id="cart-list"></ul>
+            <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
+            <button class="btn btn-success" onclick="irAPagar()">Ir a Pagar</button>
+        </div>
+    </div>
+    <footer class="footer mt-5 text-center py-3 bg-dark text-white">&copy; 2025 Adidas. Todos los derechos reservados.</footer>
+    <script>
+          const productos = [
+    { nombre: "Zapatillas Infantiles", precio: 900, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/a4bbb398e30c4c8186177c4edca4d0bf_9366/Tenis_Gazelle_x_Liberty_London_Kids_Azul_JH5207_00_plp_standard.jpg" },
+    { nombre: "Camiseta Niño", precio: 400, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/c5ae2006ad8244228ec56f74a8dcdebc_9366/camiseta-adidas-z.n.e.-kids.jpg" },
+    { nombre: "Conjunto Deportivo", precio: 100, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/a53ab9c4c9a3488fb3ffdf167fe85d72_9366/pantalon-adidas-z.n.e.-tapered-leg.jpg" },
+    { nombre: "Pantalón Deportivo", precio: 550, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/e1019540e4c84e7282c1ceff16c8204e_9366/pantalon-essentials.jpg" },
+    { nombre: "Chaqueta ", precio: 850, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/9c48eefec2e14930ae58a6b643028f27_9366/chaqueta-deportiva-firebird-adidas-originals-x-liberty-london-kids.jpg" },
+    { nombre: "Shorts Deportivos", precio: 350, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/cef0e3483ba34e26a16caefc00dbbbdd_9366/shorts-essentials-3-rayas-tejidos.jpg" },
+    { nombre: "Mochila Infantil", precio: 450, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/c044001d3f2649db9d0345596248bebb_9366/Morral_Classics_Back_To_School_Negro_IX7989_01_standard.jpg" },
+    { nombre: "Gorra Deportiva", precio: 250, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/8e337b07101a4b7c8d17c59f28b6c594_9366/gorra-de-beisbol-new-logo-bordada.jpg" },
+    { nombre: "Calcetines Adidas", precio: 150, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/1bf2c38fcba946eb83ccaf27009e5b0a_9366/medias-a-media-pantorrilla-acolchadas-3-pares.jpg" },
+    { nombre: "Balón de Fútbol", precio: 300, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/b5aa1a78cbd5477a93cdfa524fd8ea3d_9366/balon-uwcl-league.jpg" }
+];
+
+        let carrito = [];
+
+        function mostrarProductos() {
+            const container = document.getElementById("productos-container");
+            container.innerHTML = "";
+            productos.forEach((producto, index) => {
+                container.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="${producto.img}" class="card-img-top" alt="${producto.nombre}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${producto.nombre}</h5>
+                                <p class="price">$${producto.precio.toFixed(2)}</p>
+                                <button class="btn btn-comprar" onclick="agregarAlCarrito(${index})">Agregar al Carrito</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function agregarAlCarrito(index) {
+            carrito.push(productos[index]);
+            document.getElementById("cart-count").innerText = carrito.length;
+        }
+
+        function verCarrito() {
+            const modal = document.getElementById("cart-modal");
+            const cartList = document.getElementById("cart-list");
+            cartList.innerHTML = "";
+
+            if (carrito.length === 0) {
+                cartList.innerHTML = "<p>El carrito está vacío.</p>";
+            } else {
+                carrito.forEach((p) => {
+                    const li = document.createElement("li");
+                    li.classList.add("cart-item");
+                    li.innerHTML = `
+                        <img src="${p.img}" alt="${p.nombre}">
+                        <span>${p.nombre} - $${p.precio.toFixed(2)}</span>
+                    `;
+                    cartList.appendChild(li);
+                });
+            }
+
+            modal.style.display = "block";
+        }
+
+        function cerrarCarrito() {
+            document.getElementById("cart-modal").style.display = "none";
+        }
+
+        function vaciarCarrito() {
+            carrito = [];
+            document.getElementById("cart-count").innerText = "0";
+            verCarrito();
+        }
+         function irAPagar() {
+        window.location.href = "/tarjeta_credito";  // Redirige correctamente en Django
+
+    }
+
+        mostrarProductos();
+    </script>
+</body>
+</html>
