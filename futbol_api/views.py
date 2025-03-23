@@ -26,3 +26,4 @@ def miPrimera_pnatilla(request):
 
 def home_view(request):
     return render(request, "PrimeraPlantilla.html")  # Asegúrate de que el archivo existe
+

@@ -59,7 +59,7 @@ class MercadoViewSet(viewsets.ViewSet):
 
 
 def hombres_view(request):
-    return render(request, 'hombres.html')  # Asegúrate de que este archivo existe
+    return render(request, 'hombres.html')  # Incluye la app si es necesario
 
 def mujeres_view(request):
     return render(request, 'mujeres.html')

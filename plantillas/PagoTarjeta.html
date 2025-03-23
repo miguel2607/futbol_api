@@ -1,417 +1,739 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adidas - Pago con Tarjeta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-    <link rel="stylesheet" href="tarjetadecredito.css">
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            border: none;
+            text-decoration: none;
+        }
 
+        .navbar {
+            background-color: #000;
+        }
+
+        .navbar-brand img {
+            width: 50px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+        }
+
+        .container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-flow: column;
+            padding: 20px;
+        }
+
+        .payment-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .payment-header h2 {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .order-summary {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-totals {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        .container form {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px rgba(0,0,0,.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            /* Modificado: se quita el padding-top grande */
+            margin-top: 120px; /* Nuevo: margen superior */
+            margin-bottom: 30px;
+        }
+
+        .container form .inputBox {
+            margin-top: 20px;
+        }
+
+        .container form .inputBox span,
+        .container form .servicio span,
+        .container form .convenio span,
+        .container form .monto span,
+        .container form .fecha span {
+            display: block;
+            color: #666;
+            padding-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .container form .inputBox input,
+        .container form .inputBox select,
+        .container form .convenio input,
+        .container form .monto input,
+        .container form .fecha input,
+        .container form .servicio input,
+        .container form .servicio select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,.2);
+            color: #444;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .container form .inputBox input:focus,
+        .container form .inputBox select:focus,
+        .container form .convenio input:focus,
+        .container form .monto input:focus,
+        .container form .fecha input:focus {
+            border-color: #000;
+            box-shadow: 0 0 5px rgba(0,0,0,.2);
+        }
+
+        .invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 5px rgba(220, 53, 69, 0.5) !important;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .container form .flexbox {
+            display: flex;
+            gap: 15px;
+        }
+
+        .container form .flexbox .inputBox {
+            flex: 1 1 150px;
+        }
+
+        .container form .submit-btn {
+            width: 100%;
+            background: #000;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 18px;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: .2s linear;
+        }
+
+        .container form .submit-btn:hover {
+            opacity: .8;
+        }
+
+        .container form .submit-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .container .card-container {
+            margin-bottom: -100px; /* Modificado: reducido el margen negativo */
+            position: relative;
+            height: 200px; /* Modificado: altura reducida */
+            width: 350px; /* Modificado: ancho reducido */
+            z-index: 10;
+        }
+
+        .container .card-container .front,
+        .container .card-container .back {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 15px;
+            backface-visibility: hidden;
+            box-shadow: 0 15px 25px rgba(0,0,0,.2);
+            padding: 20px;
+            transition: transform .4s ease-out;
+        }
+
+        .container .card-container .front {
+            background: linear-gradient(45deg, #000, #333);
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .container .card-container .front .image {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+        }
+
+        .container .card-container .front .image img {
+            height: 40px; /* Modificado: reducida la altura */
+        }
+
+        .container .card-container .front .card-number-box {
+            padding: 20px 0; /* Modificado: reducido el padding */
+            font-size: 18px; /* Modificado: tamaño de fuente reducido */
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .container .card-container .front .flexbox {
+            display: flex;
+        }
+
+        .container .card-container .front .flexbox .box:nth-child(1) {
+            margin-right: auto;
+        }
+
+        .container .card-container .front .flexbox .box {
+            font-size: 14px; /* Modificado: tamaño de fuente reducido */
+            color: #fff;
+        }
+
+        .container .card-container .back {
+            background: linear-gradient(45deg, #111, #333);
+            transform: perspective(1000px) rotateY(180deg);
+        }
+
+        .container .card-container .back .stripe {
+            background: #000;
+            width: 100%;
+            margin: 10px 0;
+            height: 40px; /* Modificado: altura reducida */
+        }
+
+        .container .card-container .back .box {
+            padding: 0 20px;
+        }
+
+        .container .card-container .back .box span {
+            color: #fff;
+            font-size: 14px; /* Modificado: tamaño de fuente reducido */
+        }
+
+        .container .card-container .back .box .cvv-box {
+            height: 40px; /* Modificado: altura reducida */
+            padding: 10px;
+            margin-top: 5px;
+            color: #333;
+            background: #fff;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .container .card-container .back .box img {
+            margin-top: 20px; /* Modificado: reducido margen */
+            height: 30px;
+        }
+
+        .payment-success {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .success-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .return-btn {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #000;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container .card-container {
+                width: 280px;
+                height: 180px;
+            }
+
+            .container .card-container .front .card-number-box {
+                font-size: 16px;
+                padding: 15px 0;
+            }
+
+            .container form {
+                margin-top: 100px; /* Modificado: reducido el margen */
+            }
+
+            .container form .flexbox {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
-<style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
-
-
-
-*{
-    font-family: 'Poppins', sans-serif;
-    margin:0; padding:0;
-    box-sizing: border-box;
-    outline: none; border: none;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-
-.container{
-    min-height: 100vh;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: column;
-    padding-bottom: 60px;
-}
-
-.container form{
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 10px 15px rgba(0,0,0,.1);
-    padding: 20px;
-    width: 600px;
-    padding-top: 160px;
-}
-
-.container form .inputBox{
-    margin-top: 20px;
-}
-
-.container form .inputBox span{
-    display: block;
-    color:#999;
-    padding-bottom: 5px;
-}
-
-.container form .servicio span{
-    display: block;
-    color:#999;
-    padding-bottom: 5px;
-}
-
-.container form .convenio span{
-    display: block;
-    color:#999;
-    padding-bottom: 5px;
-}
-
-.container form .monto span{
-    display: block;
-    color:#999;
-    padding-bottom: 5px;
-}
-
-.container form .fecha span{
-    display: block;
-    color:#999;
-    padding-bottom: 5px;
-}
-
-.container form .fecha input{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border:1px solid rgba(0,0,0,.3);
-    color:#444;
-}
-
-.container form .inputBox input,
-.container form .inputBox select{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border:1px solid rgba(0,0,0,.3);
-    color:#444;
-}
-
-.container form .convenio input{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border:1px solid rgba(0,0,0,.3);
-    color:#444;
-}
-
-.container form .monto input{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border:1px solid rgba(0,0,0,.3);
-    color:#444;
-}
-
-.container form .servicio input,
-.container form .servicio select{
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border:1px solid rgba(0,0,0,.3);
-    color:#444;
-}
-
-.container form .flexbox{
-    display: flex;
-    gap:15px;
-}
-
-.container form .flexbox .inputBox{
-    flex:1 1 150px;
-}
-
-.container form .submit-btn{
-    width: 100%;
-    background:linear-gradient(45deg, blueviolet, rgb(130, 20, 255));
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 20px;
-    color:#fff;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: .2s linear;
-}
-
-.container form .submit-btn:hover{
-    letter-spacing: 2px;
-    opacity: .8;
-}
-
-.container .card-container{
-    margin-bottom: -150px;
-    position: relative;
-    height: 250px;
-    width: 400px;
-}
-
-.container .card-container .front{
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0; left: 0;
-    background:linear-gradient(45deg, blueviolet, rgb(39, 27, 83));
-    border-radius: 5px;
-    backface-visibility: hidden;
-    box-shadow: 0 15px 25px rgba(0,0,0,.2);
-    padding:20px;
-    transform:perspective(1000px) rotateY(0deg);
-    transition:transform .4s ease-out;
-}
-
-.container .card-container .front .image{
-    display: flex;
-    align-items:center;
-    justify-content: space-between;
-    padding-top: 10px;
-}
-
-.container .card-container .front .image img{
-    height: 50px;
-}
-
-.container .card-container .front .card-number-box{
-    padding:30px 0;
-    font-size: 22px;
-    color:#fff;
-}
-
-.container .card-container .front .flexbox{
-    display: flex;
-}
-
-.container .card-container .front .flexbox .box:nth-child(1){
-    margin-right: auto;
-}
-
-.container .card-container .front .flexbox .box{
-    font-size: 15px;
-    color:#fff;
-}
-
-.container .card-container .back{
-    position: absolute;
-    top:0; left: 0;
-    height: 100%;
-    width: 100%;
-    background:linear-gradient(45deg, blueviolet, rgb(76, 17, 212));
-    border-radius: 5px;
-    padding: 20px 0;
-    text-align: right;
-    backface-visibility: hidden;
-    box-shadow: 0 15px 25px rgba(0,0,0,.2);
-    transform:perspective(1000px) rotateY(180deg);
-    transition:transform .4s ease-out;
-}
-
-.container .card-container .back .stripe{
-    background: #000;
-    width: 100%;
-    margin: 10px 0;
-    height: 50px;
-}
-
-.container .card-container .back .box{
-    padding: 0 20px;
-}
-
-.container .card-container .back .box span{
-    color:#fff;
-    font-size: 15px;
-}
-
-.container .card-container .back .box .cvv-box{
-    height: 50px;
-    padding: 10px;
-    margin-top: 5px;
-    color:#333;
-    background: #fff;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.container .card-container .back .box img{
-    margin-top: 30px;
-    height: 30px;
-}
-
-</style>
 <body>
-
-<div class="container">
-
-    <div class="card-container">
-
-        <div class="front">
-            <div class="image">
-                <img src="imagenes/chip.png" alt="">
-                <img src="imagenes/visa.png" alt="">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Adidas_logo.png" alt="Adidas"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li><a class="nav-link" href="#">Inicio</a></li>
+                    <li><a class="nav-link" href="#">Hombres</a></li>
+                    <li><a class="nav-link" href="#">Mujeres</a></li>
+                </ul>
             </div>
-            <div class="card-number-box">################</div>
-            <div class="flexbox">
-                <div class="box">
-                    <span>Propietario</span>
-                    <div class="card-holder-name">Nombre completo</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="payment-header">
+            <h2>Finalizar Compra</h2>
+            <p>Complete los datos para realizar el pago</p>
+        </div>
+
+        <div class="order-summary" id="order-summary">
+            <!-- El contenido del resumen de la orden se generará dinámicamente -->
+        </div>
+
+        <div class="card-container">
+            <div class="front">
+                <div class="image">
+                    <img src="https://i.ibb.co/HPjT3Df/chip.png" alt="chip">
+                    <img src="https://i.ibb.co/c8zGVWz/visa.png" alt="visa">
                 </div>
-                <div class="box">
-                    <span>Se vence</span>
-                    <div class="expiration">
-                        <span class="exp-month">mm</span>
-                        <span class="exp-year">yy</span>
+                <div class="card-number-box">################</div>
+                <div class="flexbox">
+                    <div class="box">
+                        <span>Propietario</span>
+                        <div class="card-holder-name">Nombre completo</div>
+                    </div>
+                    <div class="box">
+                        <span>Vence</span>
+                        <div class="expiration">
+                            <span class="exp-month">mm</span>
+                            /
+                            <span class="exp-year">yy</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="back">
-            <div class="stripe"></div>
-            <div class="box">
-                <span>cvv</span>
-                <div class="cvv-box"></div>
-                <img src="image/visa.png" alt="">
+            <div class="back">
+                <div class="stripe"></div>
+                <div class="box">
+                    <span>cvv</span>
+                    <div class="cvv-box"></div>
+                    <img src="https://i.ibb.co/c8zGVWz/visa.png" alt="visa">
+                </div>
             </div>
         </div>
 
+        <form id="payment-form">
+            <div class="inputBox">
+                <span>Número de tarjeta</span>
+                <input type="text" maxlength="16" class="card-number-input" placeholder="1234 5678 9012 3456" required>
+                <div class="error-message" id="card-number-error">Ingrese un número de tarjeta válido (16 dígitos)</div>
+            </div>
+            <div class="inputBox">
+                <span>Propietario</span>
+                <input type="text" class="card-holder-input" placeholder="Juan Pérez" required>
+                <div class="error-message" id="card-holder-error">Ingrese el nombre del propietario</div>
+            </div>
+            <div class="flexbox">
+                <div class="inputBox">
+                    <span>Mes de expiración</span>
+                    <select class="month-input" required>
+                        <option value="" selected disabled>Mes</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    <div class="error-message" id="month-error">Seleccione un mes</div>
+                </div>
+                <div class="inputBox">
+                    <span>Año de expiración</span>
+                    <select class="year-input" required>
+                        <option value="" selected disabled>Año</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
+                        <option value="2031">2031</option>
+                        <option value="2032">2032</option>
+                        <option value="2033">2033</option>
+                    </select>
+                    <div class="error-message" id="year-error">Seleccione un año</div>
+                </div>
+                <div class="inputBox">
+                    <span>CVV</span>
+                    <input type="text" maxlength="4" class="cvv-input" placeholder="123" required>
+                    <div class="error-message" id="cvv-error">Ingrese un código CVV válido</div>
+                </div>
+            </div>
+
+            <div class="inputBox">
+                <span>Dirección de envío</span>
+                <input type="text" id="shipping-address" placeholder="Calle, número, ciudad, código postal" required>
+                <div class="error-message" id="address-error">Ingrese una dirección válida</div>
+            </div>
+
+            <div class="inputBox">
+                <span>Correo electrónico</span>
+                <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                <div class="error-message" id="email-error">Ingrese un correo electrónico válido</div>
+            </div>
+
+            <input type="submit" value="Pagar Ahora" class="submit-btn" id="submit-button">
+            <p class="text-center mt-3"><a href="#" class="text-decoration-none">Cancelar y volver a la tienda</a></p>
+        </form>
     </div>
 
-    <form action="https://formsubmit.co/washersarmenia@outlook.com" method="POST" id="myForm">
-        <div class="inputBox">
-            <span>Número de tarjeta</span>
-            <input type="text" maxlength="16" class="card-number-input">
-        </div>
-        <div class="inputBox">
-            <span>Propietario</span>
-            <input type="text" maxlength="30" class="card-holder-input">
-        </div>
-        <div class="flexbox">
-            <div class="inputBox">
-                <span>Expiración mm</span>
-                <select name="" id="" class="month-input">
-                    <option value="month" selected disabled>mes</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                </select>
+    <div class="payment-success" id="payment-success">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="bi bi-check-circle-fill"></i>
             </div>
-            <div class="inputBox">
-                <span>Expiración yy</span>
-                <select name="" id="" class="year-input">
-                    <option value="year" selected disabled>año</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                    <option value="2029">2029</option>
-                    <option value="2030">2030</option>
-                </select>
-            </div>
-            <div class="inputBox">
-                <span>Código de seguridad (CVV)</span>
-                <input type="text" maxlength="4" class="cvv-input">
+            <h3>¡Pago Exitoso!</h3>
+            <p>Tu compra ha sido procesada correctamente.</p>
+            <p>Recibirás un correo con los detalles del envío.</p>
+            <button class="return-btn" onclick="returnToHome()">Volver a la tienda</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    &copy; 2025 Adidas. Todos los derechos reservados.
+                </div>
             </div>
         </div>
+    </footer>
 
-        <br>
-        <div class="monto">
-            <span>Monto a pagar</span>
-                <input type="number" name="" maxlength="10" id="">
-        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables para almacenar el carrito y total
+        let carrito = [];
+        let totalPago = 0;
 
+        // Cargar el carrito desde localStorage al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCarritoDesdeLocalStorage();
+            mostrarResumenOrden();
+            inicializarValidaciones();
+        });
 
-        <input type="submit" value="Enviar" class="submit-btn">
-    </form>
-</div>
+        // Función para cargar carrito desde localStorage
+        function cargarCarritoDesdeLocalStorage() {
+            const carritoGuardado = localStorage.getItem('carritoAdidas');
+            if (carritoGuardado) {
+                carrito = JSON.parse(carritoGuardado);
+            }
+        }
 
+        // Función para mostrar el resumen de la orden
+        function mostrarResumenOrden() {
+            const orderSummary = document.getElementById('order-summary');
 
-<script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        const inputs = document.querySelectorAll('#myForm .inputBox input, #myForm .servicio-input, #myForm input[type="date"]');
-        let isFormValid = true;
-        inputs.forEach(function(input) {
-            if (input.value.trim() === '') {
-                isFormValid = false;
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
+            if (!carrito || carrito.length === 0) {
+                orderSummary.innerHTML = `
+                    <div class="empty-cart-message">
+                        <i class="bi bi-cart-x fs-1 d-block mb-3"></i>
+                        <p>No hay productos en tu carrito</p>
+                        <a href="#" class="btn btn-dark mt-3">Volver a la tienda</a>
+                    </div>
+                `;
+                document.getElementById('submit-button').disabled = true;
+                return;
+            }
+
+            let summaryHTML = `
+                <h4 class="mb-3">Resumen de Compra</h4>
+                <div class="order-items">
+            `;
+
+            totalPago = 0;
+
+            carrito.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                totalPago += subtotal;
+
+                summaryHTML += `
+                    <div class="order-item">
+                        <img src="${item.img}" class="order-item-img" alt="${item.nombre}">
+                        <div class="order-item-details">
+                            <h6>${item.nombre}</h6>
+                            <div class="d-flex justify-content-between">
+                                <span>$${item.precio.toFixed(2)} x ${item.cantidad}</span>
+                                <span>$${subtotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            summaryHTML += `
+                </div>
+                <div class="order-totals">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>$${totalPago.toFixed(2)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Envío:</span>
+                        <span>Gratis</span>
+                    </div>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total:</span>
+                        <span>$${totalPago.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+            orderSummary.innerHTML = summaryHTML;
+        }
+
+        // Función para inicializar validaciones
+        function inicializarValidaciones() {
+            const cardNumberInput = document.querySelector('.card-number-input');
+            const cardHolderInput = document.querySelector('.card-holder-input');
+            const monthInput = document.querySelector('.month-input');
+            const yearInput = document.querySelector('.year-input');
+            const cvvInput = document.querySelector('.cvv-input');
+            const addressInput = document.getElementById('shipping-address');
+            const emailInput = document.getElementById('email');
+
+            // Validación de número de tarjeta (solo números)
+            cardNumberInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                document.querySelector('.card-number-box').innerText = this.value || '################';
+
+                if (this.value.length === 16) {
+                    document.getElementById('card-number-error').style.display = 'none';
+                }
+            });
+
+            // Validación del nombre del titular
+            cardHolderInput.addEventListener('input', function() {
+                document.querySelector('.card-holder-name').innerText = this.value || 'Nombre completo';
+
+                if (this.value.length > 0) {
+                    document.getElementById('card-holder-error').style.display = 'none';
+                }
+            });
+
+            // Validación del mes
+            monthInput.addEventListener('change', function() {
+                document.querySelector('.exp-month').innerText = this.value;
+                document.getElementById('month-error').style.display = 'none';
+            });
+
+            // Validación del año
+            yearInput.addEventListener('change', function() {
+                document.querySelector('.exp-year').innerText = this.value.slice(-2);
+                document.getElementById('year-error').style.display = 'none';
+            });
+
+            // Validación del CVV
+            cvvInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                document.querySelector('.cvv-box').innerText = this.value;
+
+                if (this.value.length >= 3) {
+                    document.getElementById('cvv-error').style.display = 'none';
+                }
+            });
+
+            // Efecto de girar la tarjeta cuando se enfoca en el CVV
+            cvvInput.addEventListener('mouseenter', function() {
+                document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(-180deg)';
+                document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(0deg)';
+            });
+
+            cvvInput.addEventListener('mouseleave', function() {
+                document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(0deg)';
+                document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(180deg)';
+            });
+
+            // Validación de dirección
+            addressInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    document.getElementById('address-error').style.display = 'none';
+                }
+            });
+
+            // Validación de email
+            emailInput.addEventListener('input', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(this.value)) {
+                    document.getElementById('email-error').style.display = 'none';
+                }
+            });
+        }
+
+        // Manejo del envío del formulario
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Validar formulario
+            let isValid = true;
+
+            // Validar número de tarjeta
+            const cardNumber = document.querySelector('.card-number-input').value;
+            if (cardNumber.length !== 16) {
+                document.getElementById('card-number-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar nombre del titular
+            const cardHolder = document.querySelector('.card-holder-input').value;
+            if (cardHolder.trim() === '') {
+                document.getElementById('card-holder-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar mes
+            const month = document.querySelector('.month-input').value;
+            if (month === '' || month === null) {
+                document.getElementById('month-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar año
+            const year = document.querySelector('.year-input').value;
+            if (year === '' || year === null) {
+                document.getElementById('year-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar CVV
+            const cvv = document.querySelector('.cvv-input').value;
+            if (cvv.length < 3) {
+                document.getElementById('cvv-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar dirección
+            const address = document.getElementById('shipping-address').value;
+            if (address.trim() === '') {
+                document.getElementById('address-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar email
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Mostrar pantalla de éxito
+                document.getElementById('payment-success').style.display = 'flex';
+
+                // Limpiar el carrito
+                localStorage.removeItem('carritoAdidas');
             }
         });
 
-        if (isFormValid) {
-           event.preventDefault();
-alert("Pago exitoso. Redirigiendo a la página de inicio...");
-setTimeout(function() {
-    window.location.href = "{% url 'home' %}"; // Redirige a la página de inicio en Django
-}, 3000);
-        } else {
-            event.preventDefault();
-            alert('Por favor, complete todos los campos antes de enviar el formulario.');
+        // Función para volver a la página principal
+        function returnToHome() {
+            window.location.href = "#";
         }
-    });
-</script>
-
-
-
-
-
-
-<script>
-
-document.querySelector('.card-number-input').oninput = () =>{
-    document.querySelector('.card-number-box').innerText = document.querySelector('.card-number-input').value;
-}
-
-document.querySelector('.card-holder-input').oninput = () =>{
-    document.querySelector('.card-holder-name').innerText = document.querySelector('.card-holder-input').value;
-}
-
-document.querySelector('.month-input').oninput = () =>{
-    document.querySelector('.exp-month').innerText = document.querySelector('.month-input').value;
-}
-
-document.querySelector('.year-input').oninput = () =>{
-    document.querySelector('.exp-year').innerText = document.querySelector('.year-input').value;
-}
-
-document.querySelector('.cvv-input').onmouseenter = () =>{
-    document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(-180deg)';
-    document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(0deg)';
-}
-
-document.querySelector('.cvv-input').onmouseleave = () =>{
-    document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(0deg)';
-    document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(180deg)';
-}
-
-document.querySelector('.cvv-input').oninput = () =>{
-    document.querySelector('.cvv-box').innerText = document.querySelector('.cvv-input').value;
-}
-
-</script>
-
-<footer>
-    <center>
-        &copy; 2024 ADIDAS CLUB
-    </center>
-</footer>
-
+    </script>
 </body>
 </html>
