@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-1ona77b51!q#mj34dzaw46v4m4qrzl^tsnqinu$-dcw$+dxhy0
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
-ALLOWED_HOSTS = ["tudominio.com", "www.tudominio.com"]
+ALLOWED_HOSTS = ['adidas-api-dsb2.onrender.com', '127.0.0.1']
 
 
 
