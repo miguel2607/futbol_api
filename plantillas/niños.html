@@ -26,26 +26,40 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            overflow-y: auto;
         }
         .cart-content {
             background: white;
-            width: 70%;
-            max-height: 80vh;
+            width: 90%;
+            max-width: 600px;
             margin: 10% auto;
             padding: 20px;
             border-radius: 10px;
-            overflow-y: auto;
+            position: relative;
         }
-        .close-btn { float: right; cursor: pointer; font-size: 24px; }
+        @media (max-width: 768px) {
+            .cart-content {
+                width: 95%;
+                margin: 5% auto;
+                padding: 15px;
+            }
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 24px;
+        }
         .cart-item {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
-            padding: 10px;
+            padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
         .cart-item img {
-            width: 70px;
+            width: 60px;
             height: auto;
             margin-right: 15px;
             border-radius: 5px;
@@ -53,59 +67,28 @@
         .cart-item-details {
             flex-grow: 1;
         }
-        .cart-item-actions {
+        .cart-actions {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
         }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            margin: 0 15px;
-        }
-        .quantity-btn {
-            background: #f1f1f1;
-            border: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .quantity-display {
-            margin: 0 10px;
+        .cart-total {
+            margin: 15px 0;
             font-weight: bold;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
         }
         .remove-item {
             color: #dc3545;
-            background: none;
-            border: none;
             cursor: pointer;
+            margin-left: 10px;
         }
-        .cart-totals {
-            text-align: right;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-        }
-        .cart-empty {
-            text-align: center;
-            padding: 30px;
-            color: #999;
-        }
-        .cart-empty i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        .product-added {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
+        /* Banner */
         .banner {
             background: url('https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_1920,w_1920/CONTENT_adi_Club_Benefits_STATEMENT_BANNER_DT_3_f216e0df87.jpg') no-repeat center center/cover;
             height: 300px;
@@ -118,24 +101,10 @@
             font-weight: bold;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
-
         @media (max-width: 768px) {
             .banner {
                 height: 200px;
                 font-size: 1.5rem;
-            }
-            .cart-content {
-                width: 95%;
-                margin: 5% auto;
-            }
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .cart-item-actions {
-                margin-top: 10px;
-                width: 100%;
-                justify-content: space-between;
             }
         }
     </style>
@@ -144,16 +113,14 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Adidas_logo.png" alt="Adidas"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
-                     <li><a class="nav-link" href="{% url 'hombres' %}"> Hombres</a></li>
-
+                    <li><a class="nav-link" href="{% url 'hombres' %}">Hombres</a></li>
                     <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="verCarrito()">
                             <i class="bi bi-cart cart-icon"></i> <span id="cart-count" class="cart-count">0</span>
@@ -163,7 +130,7 @@
             </div>
         </div>
     </nav>
-     <div class="banner">
+    <div class="banner">
         Ropa Especializada para niños
     </div>
     <div class="container mt-5">
@@ -173,39 +140,38 @@
     <div class="cart-modal" id="cart-modal">
         <div class="cart-content">
             <span class="close-btn" onclick="cerrarCarrito()">&times;</span>
-            <h2>Carrito de Compras</h2>
-            <div id="cart-list"></div>
-            <div class="cart-totals">
-                <h4>Total: $<span id="cart-total">0.00</span></h4>
+            <h2 class="mb-4">Carrito de Compras</h2>
+            <div id="cart-items-container">
+                <!-- Items del carrito se cargarán aquí dinámicamente -->
             </div>
-            <div class="d-flex justify-content-between mt-4">
-                <button class="btn btn-danger" onclick="vaciarCarrito()">
-                    <i class="bi bi-trash"></i> Vaciar Carrito
-                </button>
-                <button class="btn btn-success" onclick="irAPagar()">
-                    <i class="bi bi-credit-card"></i> Ir a Pagar
-                </button>
+            <div class="cart-total" id="cart-total">Total: $0.00</div>
+            <div class="cart-actions">
+                <button class="btn btn-outline-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
+                <button class="btn btn-success" onclick="irAPagar()">Ir a Pagar</button>
             </div>
         </div>
     </div>
     <footer class="footer mt-5 text-center py-3 bg-dark text-white">&copy; 2025 Adidas. Todos los derechos reservados.</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const productos = [
-            { nombre: "Zapatillas Infantiles", precio: 900, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/a4bbb398e30c4c8186177c4edca4d0bf_9366/Tenis_Gazelle_x_Liberty_London_Kids_Azul_JH5207_00_plp_standard.jpg" },
-            { nombre: "Camiseta Niño", precio: 400, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/c5ae2006ad8244228ec56f74a8dcdebc_9366/camiseta-adidas-z.n.e.-kids.jpg" },
-            { nombre: "Conjunto Deportivo", precio: 100, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/a53ab9c4c9a3488fb3ffdf167fe85d72_9366/pantalon-adidas-z.n.e.-tapered-leg.jpg" },
-            { nombre: "Pantalón Deportivo", precio: 550, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/e1019540e4c84e7282c1ceff16c8204e_9366/pantalon-essentials.jpg" },
-            { nombre: "Chaqueta ", precio: 850, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/9c48eefec2e14930ae58a6b643028f27_9366/chaqueta-deportiva-firebird-adidas-originals-x-liberty-london-kids.jpg" },
-            { nombre: "Shorts Deportivos", precio: 350, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/cef0e3483ba34e26a16caefc00dbbbdd_9366/shorts-essentials-3-rayas-tejidos.jpg" },
-            { nombre: "Mochila Infantil", precio: 450, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/c044001d3f2649db9d0345596248bebb_9366/Morral_Classics_Back_To_School_Negro_IX7989_01_standard.jpg" },
-            { nombre: "Gorra Deportiva", precio: 250, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/8e337b07101a4b7c8d17c59f28b6c594_9366/gorra-de-beisbol-new-logo-bordada.jpg" },
-            { nombre: "Calcetines Adidas", precio: 150, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/1bf2c38fcba946eb83ccaf27009e5b0a_9366/medias-a-media-pantorrilla-acolchadas-3-pares.jpg" },
-            { nombre: "Balón de Fútbol", precio: 300, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/b5aa1a78cbd5477a93cdfa524fd8ea3d_9366/balon-uwcl-league.jpg" }
+            { id: 1, nombre: "Zapatillas Infantiles", precio: 900, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/a4bbb398e30c4c8186177c4edca4d0bf_9366/Tenis_Gazelle_x_Liberty_London_Kids_Azul_JH5207_00_plp_standard.jpg" },
+            { id: 2, nombre: "Camiseta Niño", precio: 400, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/c5ae2006ad8244228ec56f74a8dcdebc_9366/camiseta-adidas-z.n.e.-kids.jpg" },
+            { id: 3, nombre: "Conjunto Deportivo", precio: 100, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/a53ab9c4c9a3488fb3ffdf167fe85d72_9366/pantalon-adidas-z.n.e.-tapered-leg.jpg" },
+            { id: 4, nombre: "Pantalón Deportivo", precio: 550, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/e1019540e4c84e7282c1ceff16c8204e_9366/pantalon-essentials.jpg" },
+            { id: 5, nombre: "Chaqueta ", precio: 850, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/9c48eefec2e14930ae58a6b643028f27_9366/chaqueta-deportiva-firebird-adidas-originals-x-liberty-london-kids.jpg" },
+            { id: 6, nombre: "Shorts Deportivos", precio: 350, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/cef0e3483ba34e26a16caefc00dbbbdd_9366/shorts-essentials-3-rayas-tejidos.jpg" },
+            { id: 7, nombre: "Mochila Infantil", precio: 450, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/c044001d3f2649db9d0345596248bebb_9366/Morral_Classics_Back_To_School_Negro_IX7989_01_standard.jpg" },
+            { id: 8, nombre: "Gorra Deportiva", precio: 250, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/8e337b07101a4b7c8d17c59f28b6c594_9366/gorra-de-beisbol-new-logo-bordada.jpg" },
+            { id: 9, nombre: "Calcetines Adidas", precio: 150, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/1bf2c38fcba946eb83ccaf27009e5b0a_9366/medias-a-media-pantorrilla-acolchadas-3-pares.jpg" },
+            { id: 10, nombre: "Balón de Fútbol", precio: 300, img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/b5aa1a78cbd5477a93cdfa524fd8ea3d_9366/balon-uwcl-league.jpg" },
+             { id: 11, nombre: "Tennis SuperStart II", precio: 700, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/a25b670258b34f129e6ca817f8f7f3d6_9366/Tenis_Superstar_II_Blanco_JI0124_00_plp_standard.jpg" }
         ];
 
         let carrito = [];
 
-        // Cargar carrito desde localStorage al iniciar
+        // Cargar carrito desde localStorage al iniciar la página
         document.addEventListener('DOMContentLoaded', function() {
             cargarCarritoDesdeLocalStorage();
             mostrarProductos();
@@ -215,129 +181,110 @@
         function mostrarProductos() {
             const container = document.getElementById("productos-container");
             container.innerHTML = "";
-            productos.forEach((producto, index) => {
-                const card = document.createElement('div');
-                card.className = 'col-md-4 mb-4';
-                card.innerHTML = `
-                    <div class="card shadow-sm">
-                        <div class="product-added" id="added-${index}">¡Añadido!</div>
-                        <img src="${producto.img}" class="card-img-top" alt="${producto.nombre}">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">${producto.nombre}</h5>
-                            <p class="price">$${producto.precio.toFixed(2)}</p>
-                            <button class="btn btn-comprar" onclick="agregarAlCarrito(${index})">
-                                <i class="bi bi-cart-plus"></i> Agregar al Carrito
-                            </button>
+            productos.forEach((producto) => {
+                container.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="${producto.img}" class="card-img-top" alt="${producto.nombre}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${producto.nombre}</h5>
+                                <p class="price">$${producto.precio.toFixed(2)}</p>
+                                <button class="btn btn-comprar" onclick="agregarAlCarrito(${producto.id})">Agregar al Carrito</button>
+                            </div>
                         </div>
                     </div>`;
-                container.appendChild(card);
             });
         }
 
-        function agregarAlCarrito(index) {
-            // Buscar si el producto ya existe en el carrito
-            const productoIndex = carrito.findIndex(item =>
-                item.nombre === productos[index].nombre);
+        function agregarAlCarrito(id) {
+            const producto = productos.find(p => p.id === id);
 
-            if (productoIndex > -1) {
+            // Verificar si el producto ya está en el carrito
+            const productoExistente = carrito.find(item => item.id === id);
+
+            if (productoExistente) {
                 // Si ya existe, incrementar cantidad
-                carrito[productoIndex].cantidad += 1;
+                productoExistente.cantidad = (productoExistente.cantidad || 1) + 1;
             } else {
-                // Si no existe, añadir con cantidad 1
-                const producto = {...productos[index], cantidad: 1};
-                carrito.push(producto);
+                // Si no existe, añadirlo con cantidad 1
+                carrito.push({...producto, cantidad: 1});
             }
 
-            // Mostrar mensaje de "Añadido"
-            const addedMsg = document.getElementById(`added-${index}`);
-            addedMsg.style.opacity = '1';
-            setTimeout(() => {
-                addedMsg.style.opacity = '0';
-            }, 1500);
-
-            // Actualizar contador y guardar en localStorage
-            actualizarContadorCarrito();
+            // Guardar en localStorage y actualizar interfaz
             guardarCarritoEnLocalStorage();
-        }
+            actualizarContadorCarrito();
 
-        function actualizarContadorCarrito() {
-            const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
-            document.getElementById("cart-count").innerText = totalItems;
+            // Mostrar feedback visual
+            const btnComprar = event.target;
+            btnComprar.innerHTML = "¡Añadido!";
+            btnComprar.classList.add("btn-success");
+            setTimeout(() => {
+                btnComprar.innerHTML = "Agregar al Carrito";
+                btnComprar.classList.remove("btn-success");
+            }, 1000);
         }
 
         function verCarrito() {
             const modal = document.getElementById("cart-modal");
-            actualizarVistaCarrito();
-            modal.style.display = "block";
-        }
-
-        function actualizarVistaCarrito() {
-            const cartList = document.getElementById("cart-list");
-            const cartTotal = document.getElementById("cart-total");
-
-            cartList.innerHTML = "";
+            const container = document.getElementById("cart-items-container");
+            container.innerHTML = "";
 
             if (carrito.length === 0) {
-                cartList.innerHTML = `
-                    <div class="cart-empty">
-                        <i class="bi bi-cart-x"></i>
-                        <p>Tu carrito está vacío</p>
-                        <p>¡Agrega algunos productos para comenzar!</p>
-                    </div>`;
-                cartTotal.innerText = "0.00";
+                container.innerHTML = '<div class="empty-cart-message">Tu carrito está vacío</div>';
+                document.getElementById("cart-total").innerHTML = "Total: $0.00";
             } else {
                 let total = 0;
 
-                carrito.forEach((producto, index) => {
-                    const subtotal = producto.precio * producto.cantidad;
+                carrito.forEach((item) => {
+                    const subtotal = item.precio * (item.cantidad || 1);
                     total += subtotal;
 
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
-                    cartItem.innerHTML = `
-                        <img src="${producto.img}" alt="${producto.nombre}">
+                    const itemElement = document.createElement("div");
+                    itemElement.classList.add("cart-item");
+                    itemElement.innerHTML = `
+                        <img src="${item.img}" alt="${item.nombre}">
                         <div class="cart-item-details">
-                            <h5>${producto.nombre}</h5>
-                            <div>Precio: $${producto.precio.toFixed(2)}</div>
+                            <div><strong>${item.nombre}</strong></div>
+                            <div>Precio: $${item.precio.toFixed(2)}</div>
+                            <div>
+                                Cantidad:
+                                <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                                <span class="mx-2">${item.cantidad || 1}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(${item.id}, 1)">+</button>
+                            </div>
                             <div>Subtotal: $${subtotal.toFixed(2)}</div>
                         </div>
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                                <button class="quantity-btn" onclick="cambiarCantidad(${index}, -1)">-</button>
-                                <span class="quantity-display">${producto.cantidad}</span>
-                                <button class="quantity-btn" onclick="cambiarCantidad(${index}, 1)">+</button>
-                            </div>
-                            <button class="remove-item" onclick="eliminarProducto(${index})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>`;
-
-                    cartList.appendChild(cartItem);
+                        <span class="remove-item" onclick="eliminarDelCarrito(${item.id})">
+                            <i class="bi bi-trash"></i>
+                        </span>
+                    `;
+                    container.appendChild(itemElement);
                 });
 
-                cartTotal.innerText = total.toFixed(2);
+                document.getElementById("cart-total").innerHTML = `Total: $${total.toFixed(2)}`;
+            }
+
+            modal.style.display = "block";
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const item = carrito.find(i => i.id === id);
+            if (item) {
+                item.cantidad = (item.cantidad || 1) + cambio;
+                if (item.cantidad < 1) {
+                    eliminarDelCarrito(id);
+                } else {
+                    guardarCarritoEnLocalStorage();
+                    verCarrito(); // Actualizar vista del carrito
+                }
             }
         }
 
-        function cambiarCantidad(index, cambio) {
-            carrito[index].cantidad += cambio;
-
-            // Si cantidad llega a 0, eliminar producto
-            if (carrito[index].cantidad <= 0) {
-                eliminarProducto(index);
-                return;
-            }
-
-            actualizarVistaCarrito();
-            actualizarContadorCarrito();
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(item => item.id !== id);
             guardarCarritoEnLocalStorage();
-        }
-
-        function eliminarProducto(index) {
-            carrito.splice(index, 1);
-            actualizarVistaCarrito();
             actualizarContadorCarrito();
-            guardarCarritoEnLocalStorage();
+            verCarrito(); // Actualizar vista del carrito
         }
 
         function cerrarCarrito() {
@@ -346,16 +293,21 @@
 
         function vaciarCarrito() {
             carrito = [];
-            actualizarVistaCarrito();
-            actualizarContadorCarrito();
             guardarCarritoEnLocalStorage();
+            actualizarContadorCarrito();
+            verCarrito(); // Actualizar vista del carrito
         }
 
         function irAPagar() {
-            window.location.href = "/tarjeta_credito";
+            window.location.href = "/tarjeta_credito";  // Redirige correctamente en Django
         }
 
-        // Funciones para LocalStorage
+        function actualizarContadorCarrito() {
+            const cantidadTotal = carrito.reduce((total, item) => total + (item.cantidad || 1), 0);
+            document.getElementById("cart-count").innerText = cantidadTotal;
+        }
+
+        // Funciones para persistencia con localStorage
         function guardarCarritoEnLocalStorage() {
             localStorage.setItem('carritoAdidas', JSON.stringify(carrito));
         }
@@ -364,6 +316,14 @@
             const carritoGuardado = localStorage.getItem('carritoAdidas');
             if (carritoGuardado) {
                 carrito = JSON.parse(carritoGuardado);
+            }
+        }
+
+        // Cerrar el modal si se hace clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById("cart-modal");
+            if (event.target === modal) {
+                cerrarCarrito();
             }
         }
     </script>
