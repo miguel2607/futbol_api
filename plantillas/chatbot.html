@@ -90,9 +90,10 @@
             const sendButton = document.getElementById('send-button');
 
             // Conectar al WebSocket
-            const chatSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/chat/' + userId + '/'
-            );
+           const chatSocket = new WebSocket(
+    (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + userId + '/'
+);
+
 
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
