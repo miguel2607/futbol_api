@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import JugadorViewSet
+from .views import JugadorViewSet, chatbot, chatbot_page
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
@@ -12,4 +12,5 @@ router.register(r'mercado', MercadoViewSet, basename='mercado')
 
 urlpatterns = [
     path('', include(router.urls)),
+
 ]

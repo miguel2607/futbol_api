@@ -68,4 +68,7 @@ def niños_views(request):
     return render(request,'niños.html')
 def pago_tarjeta(request):
     return render(request,'PagoTarjeta.html')
+def chatbot_page(request):
+    return render(request, "chatbot.html")
 
+###################################################################################################3

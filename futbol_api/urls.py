@@ -30,5 +30,6 @@ urlpatterns = [
     path("inicio", home_view, name="home"),
     path("mujeres",mujeres_view, name="mujeres"),
     path("niños",niños_views,name="niños"),
-    path("tarjeta_credito", pago_tarjeta, name="tarjeta")
+    path("tarjeta_credito", pago_tarjeta, name="tarjeta"),
+
 ]

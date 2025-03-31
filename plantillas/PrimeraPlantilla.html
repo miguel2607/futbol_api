@@ -11,6 +11,9 @@
     <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+    <!-- Font Awesome para los iconos de redes sociales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <!-- Estilos personalizados -->
     <style>
         body {
@@ -88,6 +91,23 @@
             padding: 20px 0;
             text-align: center;
         }
+
+        /* Redes sociales en el footer */
+        .social-media {
+            margin-bottom: 20px;
+        }
+
+        .social-media a {
+            color: #fff;
+            font-size: 24px;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-media a:hover {
+            color: #3FC3D5; /* Color azul característico de Adidas */
+        }
     </style>
 </head>
 <body>
@@ -96,7 +116,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="data:image/png;base64,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" alt="Adidas">
+                <img src="data:image/png;base64,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" alt="Adidas">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -199,6 +219,11 @@
 
     <!-- Footer -->
     <footer class="footer mt-5">
+        <div class="social-media">
+            <a href="https://www.instagram.com/adidas" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@adidas" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.youtube.com/adidas" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
         <p>&copy; 2025 Tienda Adidas - Todos los derechos reservados.</p>
     </footer>
 
