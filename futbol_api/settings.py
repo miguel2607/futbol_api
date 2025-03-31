@@ -37,7 +37,6 @@ ALLOWED_HOSTS = ['adidas-api-dsb2.onrender.com', '127.0.0.1']
 INSTALLED_APPS = [
 'chatbot',
     'channels',
-
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
