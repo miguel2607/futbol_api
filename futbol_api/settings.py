@@ -35,6 +35,9 @@ ALLOWED_HOSTS = ['adidas-api-dsb2.onrender.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+'chatbot',
+    'channels',
+
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,7 +89,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'futbol_api.wsgi.application'
+ASGI_APPLICATION = 'futbol_api.asgi.application'
 
 
 # Database
@@ -147,3 +150,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Configuración de Channels
+ASGI_APPLICATION = 'futbol_api.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # Para producción, es mejor usar Redis:
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     "hosts": [('127.0.0.1', 6379)],
+        # },
+    },
+}

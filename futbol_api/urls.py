@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
+
 from futbol_api.views import miPrimera_pnatilla, home_view
 from productos.views import hombres_view  # ✔ Importa desde la app correcta
 from productos.views import mujeres_view
@@ -31,5 +33,7 @@ urlpatterns = [
     path("mujeres",mujeres_view, name="mujeres"),
     path("niños",niños_views,name="niños"),
     path("tarjeta_credito", pago_tarjeta, name="tarjeta"),
+    path('chatbot/', include('chatbot.urls')),
+    path('chat/', TemplateView.as_view(template_name='chatbot.html'), name='chat_interface'),
 
 ]
