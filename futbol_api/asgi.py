@@ -13,3 +13,4 @@ application = ProtocolTypeRouter({
         path("ws/chat/<int:user_id>/", ChatConsumer.as_asgi()),
     ])
 })
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'futbol_api.settings')
