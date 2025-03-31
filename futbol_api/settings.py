@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['adidas-api-dsb2.onrender.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+'daphne',
 'chatbot',
     'channels',
     'jazzmin',
