@@ -33,7 +33,7 @@ urlpatterns = [
     path("mujeres",mujeres_view, name="mujeres"),
     path("niños",niños_views,name="niños"),
     path("tarjeta_credito", pago_tarjeta, name="tarjeta"),
-    path('chatbot/', include('chatbot.urls')),
+
     path('chat/', TemplateView.as_view(template_name='chatbot.html'), name='chat_interface'),
 
 ]

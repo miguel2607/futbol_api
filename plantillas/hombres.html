@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Catálogo Adidas Hombres</title>
+    <title>Catálogo Adidas Mujeres</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -19,7 +19,7 @@
         .price { color: #28a745; font-weight: bold; }
         .btn-comprar { background-color: #000; color: white; border-radius: 20px; width: 100%; }
 
-        /* Mejoras para el carrito responsivo */
+        /* Estilos del carrito */
         .cart-modal {
             display: none;
             position: fixed;
@@ -39,13 +39,6 @@
             padding: 20px;
             border-radius: 10px;
             position: relative;
-        }
-        @media (max-width: 768px) {
-            .cart-content {
-                width: 95%;
-                margin: 5% auto;
-                padding: 15px;
-            }
         }
         .close-btn {
             position: absolute;
@@ -92,7 +85,7 @@
             margin-left: 10px;
         }
 
-        /* Banner responsivo */
+        /* Banner */
         .banner {
             background: url('https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_1920,w_1920/CONTENT_adi_Club_Benefits_STATEMENT_BANNER_DT_3_f216e0df87.jpg') no-repeat center center/cover;
             height: 300px;
@@ -105,25 +98,17 @@
             font-weight: bold;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
-        @media (max-width: 768px) {
-            .banner {
-                height: 200px;
-                font-size: 1.5rem;
-            }
-        }
-         /* Footer */
+
+        /* Footer */
         .footer {
             background-color: #000;
             color: white;
             padding: 20px 0;
             text-align: center;
         }
-
-        /* Redes sociales en el footer */
         .social-media {
             margin-bottom: 20px;
         }
-
         .social-media a {
             color: #fff;
             font-size: 24px;
@@ -131,9 +116,219 @@
             text-decoration: none;
             transition: color 0.3s ease;
         }
-
         .social-media a:hover {
-            color: #3FC3D5; /* Color azul característico de Adidas */
+            color: #3FC3D5;
+        }
+
+        /* Estilos del Chatbot */
+        .chat-bot-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 999;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .chat-bot-toggle:hover {
+            transform: scale(1.1);
+            background: #00a1e0;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+        }
+        .chat-container.active {
+            display: flex;
+        }
+        .chat-header {
+            background: #000;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .chat-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .chat-close {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        .chat-close:hover {
+            color: #00a1e0;
+        }
+        .chat-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8f8f8;
+            flex-grow: 1;
+            scroll-behavior: smooth;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            clear: both;
+            position: relative;
+        }
+        .user-message {
+            background: linear-gradient(120deg, #000, #333);
+            color: white;
+            float: right;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .bot-message {
+            background-color: white;
+            float: left;
+            border-bottom-left-radius: 4px;
+            border-left: 3px solid #00a1e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .bot-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 5px;
+            padding-left: 5px;
+            font-weight: 500;
+        }
+        .typing-indicator {
+            display: none;
+            padding: 12px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            margin-bottom: 15px;
+            float: left;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #000;
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        @keyframes typing {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background-color: white;
+            align-items: center;
+        }
+        #message-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            margin-right: 10px;
+            font-size: 14px;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        #message-input:focus {
+            border-color: #000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #send-button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        #send-button:hover {
+            background: #00a1e0;
+            transform: translateY(-2px);
+        }
+        #send-button:active {
+            transform: translateY(1px);
+        }
+        .send-icon {
+            margin-left: 5px;
+        }
+        .three-stripes {
+            display: inline-block;
+            width: 30px;
+            height: 18px;
+            position: relative;
+            margin-right: 10px;
+            transform: skewX(-10deg);
+        }
+        .stripe {
+            position: absolute;
+            width: 6px;
+            height: 18px;
+            background: white;
+            transform: skewX(20deg);
+            transition: all 0.3s;
+        }
+        .stripe:nth-child(1) {
+            left: 0;
+        }
+        .stripe:nth-child(2) {
+            left: 12px;
+        }
+        .stripe:nth-child(3) {
+            left: 24px;
         }
     </style>
 </head>
@@ -148,7 +343,12 @@
                 <ul class="navbar-nav ms-auto">
                     <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
                     <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'niños' %}">Niños</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'niños' %}">Niños</a>
+
+
+                    </li>
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="verCarrito()">
                             <i class="bi bi-cart cart-icon"></i> <span id="cart-count" class="cart-count">0</span>
@@ -168,21 +368,21 @@
         <div class="row" id="productos-container"></div>
     </div>
 
+    <!-- Modal del Carrito -->
     <div class="cart-modal" id="cart-modal">
         <div class="cart-content">
             <span class="close-btn" onclick="cerrarCarrito()">&times;</span>
             <h2 class="mb-4">Carrito de Compras</h2>
-            <div id="cart-items-container">
-                <!-- Los items del carrito se cargarán aquí dinámicamente -->
-            </div>
+            <div id="cart-items-container"></div>
             <div class="cart-total" id="cart-total">Total: $0.00</div>
             <div class="cart-actions">
-                <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
+                <button class="btn btn-outline-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
                 <button class="btn btn-success" onclick="irAPagar()">Ir a Pagar</button>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="footer mt-5">
         <div class="social-media">
             <a href="https://www.instagram.com/adidas" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -192,8 +392,45 @@
         <p>&copy; 2025 Tienda Adidas - Todos los derechos reservados.</p>
     </footer>
 
+    <!-- Chatbot Toggle Button -->
+    <button class="chat-bot-toggle" id="chatBotToggle">
+        <i class="bi bi-chat-dots-fill chat-icon"></i>
+    </button>
+
+    <!-- Chatbot Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <div class="three-stripes">
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+            </div>
+            <h2>ADIDAS ASISTENTE</h2>
+            <div class="chat-close" id="chatClose">
+                <i class="bi bi-x-lg"></i>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="bot-indicator">ADIDAS BOT</div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+            <button id="send-button">
+                Enviar
+                <i class="bi bi-send-fill send-icon"></i>
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Datos de productos
         const productos = [
             { id: 1, nombre: "Zapatillas Predator", precio: 1500, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/d79cfe57d6ac47beb3e8159e67526eb3_9366/guayos-f50-league-pasto-sintetico.jpg" },
             { id: 2, nombre: "Camiseta Deportiva", precio: 600, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c40a281ad049448493a681238c71893d_9366/Camiseta_de_Entrenamiento_Designed_for_Training_Blanco_IS3808_21_model.jpg" },
@@ -206,18 +443,26 @@
                { id: 9, nombre: "Predator", precio: 750, img: "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4df24bfaad4a40c0a0ff396b9f73f6c2_9366/Guayos_Predator_League_Sin_Cordones_Firm-Multi-Terreno_Rojo_ID3859_HM3_hover.jpg" },
                 { id: 10, nombre: "Guantes Predator", precio: 250, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/87b8d139ffcc4cd5954dc62d756693a4_9366/guantes-de-arquero-predator-league.jpg" },
                  { id: 11, nombre: "Zapatillas Adidas XYZ", precio: 120, img: "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_400,w_400/lam_ss25_football_wayfinding_predator_d_04d812ed7e.jpg" },
+                  { id: 12, nombre: "Camiseta Real Madrid", precio: 140, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/bba09c80cdf3416c9957d5ea0dee0738_9366/Camiseta_Local_Real_Madrid_24-25_Blanco_IU5011_HM1.jpg" },
+
 
         ];
 
+
+
+
+
         let carrito = [];
 
-        // Cargar carrito desde localStorage al iniciar la página
+        // Cargar carrito desde localStorage al iniciar
         document.addEventListener('DOMContentLoaded', function() {
             cargarCarritoDesdeLocalStorage();
             mostrarProductos();
             actualizarContadorCarrito();
+            initChatbot();
         });
 
+        // Funciones del carrito
         function mostrarProductos() {
             const container = document.getElementById("productos-container");
             container.innerHTML = "";
@@ -238,23 +483,17 @@
 
         function agregarAlCarrito(id) {
             const producto = productos.find(p => p.id === id);
-
-            // Verificar si el producto ya está en el carrito
             const productoExistente = carrito.find(item => item.id === id);
 
             if (productoExistente) {
-                // Si ya existe, incrementar cantidad
                 productoExistente.cantidad = (productoExistente.cantidad || 1) + 1;
             } else {
-                // Si no existe, añadirlo con cantidad 1
                 carrito.push({...producto, cantidad: 1});
             }
 
-            // Guardar en localStorage y actualizar interfaz
             guardarCarritoEnLocalStorage();
             actualizarContadorCarrito();
 
-            // Mostrar feedback visual
             const btnComprar = event.target;
             btnComprar.innerHTML = "¡Añadido!";
             btnComprar.classList.add("btn-success");
@@ -315,7 +554,7 @@
                     eliminarDelCarrito(id);
                 } else {
                     guardarCarritoEnLocalStorage();
-                    verCarrito(); // Actualizar vista del carrito
+                    verCarrito();
                 }
             }
         }
@@ -324,7 +563,7 @@
             carrito = carrito.filter(item => item.id !== id);
             guardarCarritoEnLocalStorage();
             actualizarContadorCarrito();
-            verCarrito(); // Actualizar vista del carrito
+            verCarrito();
         }
 
         function cerrarCarrito() {
@@ -335,11 +574,11 @@
             carrito = [];
             guardarCarritoEnLocalStorage();
             actualizarContadorCarrito();
-            verCarrito(); // Actualizar vista del carrito
+            verCarrito();
         }
 
         function irAPagar() {
-            window.location.href = "/tarjeta_credito";  // Redirige correctamente en Django
+            window.location.href = "/tarjeta_credito";
         }
 
         function actualizarContadorCarrito() {
@@ -347,7 +586,6 @@
             document.getElementById("cart-count").innerText = cantidadTotal;
         }
 
-        // Funciones para persistencia con localStorage
         function guardarCarritoEnLocalStorage() {
             localStorage.setItem('carritoAdidas', JSON.stringify(carrito));
         }
@@ -359,13 +597,157 @@
             }
         }
 
-        // Cerrar el modal si se hace clic fuera de él
-        window.onclick = function(event) {
-            const modal = document.getElementById("cart-modal");
-            if (event.target === modal) {
-                cerrarCarrito();
+        // Código del Chatbot
+   document.addEventListener('DOMContentLoaded', () => {
+            // Elementos del chat
+            const chatBotToggle = document.getElementById('chatBotToggle');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatClose = document.getElementById('chatClose');
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typingIndicator');
+
+            // Configuración inicial
+            const userId = 1; // Este debería ser el ID del usuario actual
+
+
+
+            // Conectar al WebSocket
+            let chatSocket;
+            try {
+                chatSocket = new WebSocket(
+                    (window.location.protocol === 'https:' ? 'wss://' : 'ws://') +
+                    window.location.host +
+                    '/ws/chat/' + userId + '/'
+                );
+            } catch (e) {
+                console.log('Simulando conexión WebSocket para demo');
+                chatSocket = {
+                    send: function(msg) {
+                        console.log('Mensaje enviado (demo):', msg);
+                        const userMessage = JSON.parse(msg).message.toLowerCase();
+
+                        // Mostrar indicador de escritura
+                        showTypingIndicator();
+
+                        // Simular respuesta del bot después de un tiempo aleatorio
+                        setTimeout(() => {
+                            hideTypingIndicator();
+
+                            // Respuestas pre-programadas para demo
+                            if (userMessage.includes('hola') || userMessage.includes('buenas')) {
+                                addMessage('¡Hola! ¿En qué puedo ayudarte hoy? Estoy aquí para resolver todas tus dudas sobre productos Adidas para fútbol.', 'bot');
+                            } else if (userMessage.includes('botas') || userMessage.includes('calzado')) {
+                                addMessage('Nuestras líneas principales de botas son: Predator para control, X para velocidad y Copa para toque. ¿Sobre cuál te gustaría saber más?', 'bot');
+                            } else if (userMessage.includes('predator')) {
+                                addMessage('Las Predator son nuestras botas diseñadas para el control total. Su tecnología Controlframe proporciona estabilidad, mientras que las zonas texturizadas mejoran el contacto con el balón. Perfectas para mediocampistas.', 'bot');
+                            } else if (userMessage.includes('balon') || userMessage.includes('pelota')) {
+                                addMessage('Nuestro último balón oficial es el Al Rihla, diseñado para el Mundial 2022. Cuenta con tecnología CTR-CORE para precisión y SPEEDSHELL para aerodinámica mejorada.', 'bot');
+                            } else if (userMessage.includes('camiseta') || userMessage.includes('equipacion')) {
+                                addMessage('Contamos con equipaciones oficiales para clubes como Real Madrid, Manchester United, Bayern Munich, Juventus y selecciones como España, Alemania y Argentina. ¿De qué equipo te gustaría ver la camiseta?', 'bot');
+                            } else if (userMessage.includes('tecnologia') || userMessage.includes('innovacion')) {
+                                addMessage('Entre nuestras tecnologías destacan AEROREADY para gestión de la humedad, HEAT.RDY para refrigeración en condiciones de calor y PRIMEKNIT para materiales ultraligeros y flexibles.', 'bot');
+                            } else {
+                                addMessage('Gracias por tu pregunta. Para darte la mejor información, ¿podrías especificar si quieres saber sobre botas, equipaciones, balones o accesorios de fútbol?', 'bot');
+                            }
+                        }, Math.random() * 1000 + 1000);
+                    }
+                };
             }
-        }
+
+            // Manejar mensajes del WebSocket
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                hideTypingIndicator();
+                addMessage(data.message, 'bot');
+            };
+
+            // Manejar cierre de conexión
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+                addMessage('La conexión se ha interrumpido. Por favor, recarga la página.', 'bot');
+            };
+
+            // Función para mostrar el indicador de escritura
+            function showTypingIndicator() {
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Función para ocultar el indicador de escritura
+            function hideTypingIndicator() {
+                typingIndicator.style.display = 'none';
+            }
+
+            // Función para enviar mensaje
+            function sendMessage() {
+                const message = messageInput.value;
+                if (message.trim() === '') return;
+
+                // Añadir mensaje del usuario a la interfaz
+                addMessage(message, 'user');
+
+                // Enviar mensaje al WebSocket
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+
+                // Limpiar input
+                messageInput.value = '';
+
+                // Mostrar indicador de escritura
+                showTypingIndicator();
+            }
+
+            // Función para añadir mensaje a la interfaz
+            function addMessage(message, sender) {
+                // Ocultar indicador de escritura
+                hideTypingIndicator();
+
+                if (sender === 'bot') {
+                    const botIndicator = document.createElement('div');
+                    botIndicator.className = 'bot-indicator';
+                    botIndicator.textContent = 'ADIDAS BOT';
+                    chatMessages.appendChild(botIndicator);
+                }
+
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+
+                // Scroll al final
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Event listeners para el botón del chat
+            chatBotToggle.addEventListener('click', function() {
+                chatContainer.classList.toggle('active');
+                if (chatContainer.classList.contains('active')) {
+                    messageInput.focus();
+                }
+            });
+
+            chatClose.addEventListener('click', function() {
+                chatContainer.classList.remove('active');
+            });
+
+            // Enviar mensaje con botón o Enter
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Enfoque en el input al cargar
+            setTimeout(() => {
+                if (chatContainer.classList.contains('active')) {
+                    messageInput.focus();
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html>

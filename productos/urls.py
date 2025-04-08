@@ -1,6 +1,5 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import JugadorViewSet, chatbot, chatbot_page
+
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter

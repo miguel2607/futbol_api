@@ -49,3 +49,6 @@ def end_conversation(request, conversation_id):
             {"error": "Conversación no encontrada"},
             status=status.HTTP_404_NOT_FOUND
         )
+
+    def chatbot_view(request):
+        return render(request, 'chatbot.html')

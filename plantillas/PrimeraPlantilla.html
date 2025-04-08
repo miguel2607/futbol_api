@@ -14,11 +14,24 @@
     <!-- Font Awesome para los iconos de redes sociales -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- Animate.css para animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
     <!-- Estilos personalizados -->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+        :root {
+            --adidas-black: #000000;
+            --adidas-gray: #f5f5f5;
+            --adidas-accent: #00a1e0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             background-color: #f8f9fa;
+            position: relative;
+            min-height: 100vh;
         }
 
         /* Navbar estilo Adidas */
@@ -47,7 +60,6 @@
             font-weight: bold;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
-
 
         /* Tarjetas de productos */
         .card {
@@ -108,29 +120,341 @@
         .social-media a:hover {
             color: #3FC3D5; /* Color azul característico de Adidas */
         }
+
+        /* CHATBOT ESTILOS */
+        .chat-bot-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: var(--adidas-black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 999;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-bot-toggle:hover {
+            transform: scale(1.1);
+            background: var(--adidas-accent);
+        }
+
+        .chat-bot-toggle:focus {
+            outline: none;
+        }
+
+        .chat-bot-toggle .chat-icon {
+            color: white;
+            font-size: 24px;
+        }
+
+        .chat-bot-toggle .three-stripes {
+            display: inline-block;
+            width: 20px;
+            height: 14px;
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            transform: skewX(-10deg);
+        }
+
+        .chat-bot-toggle .stripe {
+            position: absolute;
+            width: 4px;
+            height: 12px;
+            background: white;
+            transform: skewX(20deg);
+        }
+
+        .chat-bot-toggle .stripe:nth-child(1) {
+            left: 0;
+        }
+
+        .chat-bot-toggle .stripe:nth-child(2) {
+            left: 8px;
+        }
+
+        .chat-bot-toggle .stripe:nth-child(3) {
+            left: 16px;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--adidas-black);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-header h2 {
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .chat-close {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .chat-close:hover {
+            color: var(--adidas-accent);
+        }
+
+        .chat-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8f8f8;
+            background-image: url('/api/placeholder/400/400');
+            background-blend-mode: overlay;
+            background-size: cover;
+            flex-grow: 1;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            clear: both;
+            position: relative;
+            animation-duration: 0.4s;
+        }
+
+        .user-message {
+            background: linear-gradient(120deg, var(--adidas-black), #333);
+            color: white;
+            float: right;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transform-origin: bottom right;
+            animation: bounceIn 0.5s;
+        }
+
+        .bot-message {
+            background-color: white;
+            float: left;
+            border-bottom-left-radius: 4px;
+            border-left: 3px solid var(--adidas-accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transform-origin: bottom left;
+            animation: fadeInLeft 0.5s;
+        }
+
+        .bot-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 5px;
+            padding-left: 5px;
+            font-weight: 500;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            margin-bottom: 15px;
+            float: left;
+            animation: fadeIn 0.5s;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: var(--adidas-black);
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background-color: white;
+            align-items: center;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            margin-right: 10px;
+            font-size: 14px;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        #message-input:focus {
+            border-color: var(--adidas-black);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #send-button {
+            background: var(--adidas-black);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        #send-button:hover {
+            background: var(--adidas-accent);
+            transform: translateY(-2px);
+        }
+
+        #send-button:active {
+            transform: translateY(1px);
+        }
+
+        .send-icon {
+            margin-left: 5px;
+        }
+
+        .three-stripes {
+            display: inline-block;
+            width: 30px;
+            height: 18px;
+            position: relative;
+            margin-right: 10px;
+            transform: skewX(-10deg);
+        }
+
+        .stripe {
+            position: absolute;
+            width: 6px;
+            height: 18px;
+            background: white;
+            transform: skewX(20deg);
+            transition: all 0.3s;
+        }
+
+        .stripe:nth-child(1) {
+            left: 0;
+        }
+
+        .stripe:nth-child(2) {
+            left: 12px;
+        }
+
+        .stripe:nth-child(3) {
+            left: 24px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
+     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="data:image/png;base64,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" alt="Adidas">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="data:image/png;base64,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" alt="Adidas">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
              <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                      <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
-                    <li><a class="nav-link" href="{% url 'hombres' %}"> Hombres</a></li>
-
-
+                    <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+                    <li><a class="nav-link" href="{% url 'hombres' %}">Hombres</a></li>
                     <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
-
                     <li class="nav-item"><a class="nav-link" href="{% url 'niños' %}">Niños</a></li>
-
                 </ul>
             </div>
         </div>
@@ -147,7 +471,7 @@
 
         <div class="row">
             <!-- Producto 1 -->
-            <div class="col-md-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <img src="https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_400,w_400/lam_ss25_football_wayfinding_predator_d_04d812ed7e.jpg" class="card-img-top" alt="Producto 1">
                     <div class="card-body text-center">
@@ -159,7 +483,7 @@
             </div>
 
             <!-- Producto 2 -->
-            <div class="col-md-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/3da99393e5294a1fab1681dd60425ac1_9366/Camiseta_Local_Millonarios_FC_2025_Azul_KB3185_01_laydown.jpg" class="card-img-top" alt="Producto 2">
                     <div class="card-body text-center">
@@ -171,7 +495,7 @@
             </div>
 
             <!-- Producto 3 -->
-            <div class="col-md-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/07e59764e9f840da97a6b47bf6a25cce_9366/Tenis_Superstar_x_Felipe_Negro_JR7831_00_plp_standard.jpg" class="card-img-top" alt="Producto 3">
                     <div class="card-body text-center">
@@ -181,9 +505,11 @@
                     </div>
                 </div>
             </div>
-             <div class="col-md-4">
+
+            <!-- Producto 4 -->
+             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
-                    <img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/a25b670258b34f129e6ca817f8f7f3d6_9366/Tenis_Superstar_II_Blanco_JI0124_00_plp_standard.jpg" class="card-img-top" alt="Producto 2">
+                    <img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/a25b670258b34f129e6ca817f8f7f3d6_9366/Tenis_Superstar_II_Blanco_JI0124_00_plp_standard.jpg" class="card-img-top" alt="Tennis">
                     <div class="card-body text-center">
                         <h5 class="card-title">Tennis SuperStart II</h5>
                         <p class="price">$700.000</p>
@@ -191,20 +517,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+
+            <!-- Producto 5 -->
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
-                    <img src="https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4df24bfaad4a40c0a0ff396b9f73f6c2_9366/Guayos_Predator_League_Sin_Cordones_Firm-Multi-Terreno_Rojo_ID3859_HM3_hover.jpg" class="card-img-top" alt="Producto 2">
+                    <img src="https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4df24bfaad4a40c0a0ff396b9f73f6c2_9366/Guayos_Predator_League_Sin_Cordones_Firm-Multi-Terreno_Rojo_ID3859_HM3_hover.jpg" class="card-img-top" alt="Predator">
                     <div class="card-body text-center">
                         <h5 class="card-title">Predator</h5>
                         <p class="price">$750.000</p>
-                      <button class="btn btn-comprar" onclick="window.location.href = '{% url 'hombres' %}'">Consíguelo ahora</button>
-
+                        <button class="btn btn-comprar" onclick="window.location.href = '{% url 'hombres' %}'">Consíguelo ahora</button>
                     </div>
                 </div>
             </div>
-             <div class="col-md-4">
+
+            <!-- Producto 6 -->
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
-                    <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/87b8d139ffcc4cd5954dc62d756693a4_9366/guantes-de-arquero-predator-league.jpg" class="card-img-top" alt="Producto 2">
+                    <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/87b8d139ffcc4cd5954dc62d756693a4_9366/guantes-de-arquero-predator-league.jpg" class="card-img-top" alt="Guantes">
                     <div class="card-body text-center">
                         <h5 class="card-title">Guantes Predator</h5>
                         <p class="price">$250.000</p>
@@ -215,9 +544,46 @@
         </div>
     </div>
 
+    <!-- Chatbot Toggle Button -->
+    <button class="chat-bot-toggle" id="chatBotToggle">
+        <div class="chat-icon">
+            <i class="bi bi-chat-dots-fill"></i>
+        </div>
 
+    </button>
 
-    <!-- Footer -->
+    <!-- Chatbot Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <div class="three-stripes">
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+            </div>
+            <h2>ADIDAS ASISTENTE</h2>
+            <div class="chat-close" id="chatClose">
+                <i class="bi bi-x-lg"></i>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="bot-indicator">ADIDAS BOT</div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+            <button id="send-button">
+                Enviar
+                <i class="bi bi-send-fill send-icon"></i>
+            </button>
+        </div>
+    </div>
+
+      <!-- Footer -->
     <footer class="footer mt-5">
         <div class="social-media">
             <a href="https://www.instagram.com/adidas" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -230,8 +596,158 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript para carrito -->
+    <!-- JavaScript para el chatbot -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos del chat
+            const chatBotToggle = document.getElementById('chatBotToggle');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatClose = document.getElementById('chatClose');
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typingIndicator');
+
+            // Configuración inicial
+            const userId = 1; // Este debería ser el ID del usuario actual
 
 
+
+            // Conectar al WebSocket
+            let chatSocket;
+            try {
+                chatSocket = new WebSocket(
+                    (window.location.protocol === 'https:' ? 'wss://' : 'ws://') +
+                    window.location.host +
+                    '/ws/chat/' + userId + '/'
+                );
+            } catch (e) {
+                console.log('Simulando conexión WebSocket para demo');
+                chatSocket = {
+                    send: function(msg) {
+                        console.log('Mensaje enviado (demo):', msg);
+                        const userMessage = JSON.parse(msg).message.toLowerCase();
+
+                        // Mostrar indicador de escritura
+                        showTypingIndicator();
+
+                        // Simular respuesta del bot después de un tiempo aleatorio
+                        setTimeout(() => {
+                            hideTypingIndicator();
+
+                            // Respuestas pre-programadas para demo
+                            if (userMessage.includes('hola') || userMessage.includes('buenas')) {
+                                addMessage('¡Hola! ¿En qué puedo ayudarte hoy? Estoy aquí para resolver todas tus dudas sobre productos Adidas para fútbol.', 'bot');
+                            } else if (userMessage.includes('botas') || userMessage.includes('calzado')) {
+                                addMessage('Nuestras líneas principales de botas son: Predator para control, X para velocidad y Copa para toque. ¿Sobre cuál te gustaría saber más?', 'bot');
+                            } else if (userMessage.includes('predator')) {
+                                addMessage('Las Predator son nuestras botas diseñadas para el control total. Su tecnología Controlframe proporciona estabilidad, mientras que las zonas texturizadas mejoran el contacto con el balón. Perfectas para mediocampistas.', 'bot');
+                            } else if (userMessage.includes('balon') || userMessage.includes('pelota')) {
+                                addMessage('Nuestro último balón oficial es el Al Rihla, diseñado para el Mundial 2022. Cuenta con tecnología CTR-CORE para precisión y SPEEDSHELL para aerodinámica mejorada.', 'bot');
+                            } else if (userMessage.includes('camiseta') || userMessage.includes('equipacion')) {
+                                addMessage('Contamos con equipaciones oficiales para clubes como Real Madrid, Manchester United, Bayern Munich, Juventus y selecciones como España, Alemania y Argentina. ¿De qué equipo te gustaría ver la camiseta?', 'bot');
+                            } else if (userMessage.includes('tecnologia') || userMessage.includes('innovacion')) {
+                                addMessage('Entre nuestras tecnologías destacan AEROREADY para gestión de la humedad, HEAT.RDY para refrigeración en condiciones de calor y PRIMEKNIT para materiales ultraligeros y flexibles.', 'bot');
+                            } else {
+                                addMessage('Gracias por tu pregunta. Para darte la mejor información, ¿podrías especificar si quieres saber sobre botas, equipaciones, balones o accesorios de fútbol?', 'bot');
+                            }
+                        }, Math.random() * 1000 + 1000);
+                    }
+                };
+            }
+
+            // Manejar mensajes del WebSocket
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                hideTypingIndicator();
+                addMessage(data.message, 'bot');
+            };
+
+            // Manejar cierre de conexión
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+                addMessage('La conexión se ha interrumpido. Por favor, recarga la página.', 'bot');
+            };
+
+            // Función para mostrar el indicador de escritura
+            function showTypingIndicator() {
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Función para ocultar el indicador de escritura
+            function hideTypingIndicator() {
+                typingIndicator.style.display = 'none';
+            }
+
+            // Función para enviar mensaje
+            function sendMessage() {
+                const message = messageInput.value;
+                if (message.trim() === '') return;
+
+                // Añadir mensaje del usuario a la interfaz
+                addMessage(message, 'user');
+
+                // Enviar mensaje al WebSocket
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+
+                // Limpiar input
+                messageInput.value = '';
+
+                // Mostrar indicador de escritura
+                showTypingIndicator();
+            }
+
+            // Función para añadir mensaje a la interfaz
+            function addMessage(message, sender) {
+                // Ocultar indicador de escritura
+                hideTypingIndicator();
+
+                if (sender === 'bot') {
+                    const botIndicator = document.createElement('div');
+                    botIndicator.className = 'bot-indicator';
+                    botIndicator.textContent = 'ADIDAS BOT';
+                    chatMessages.appendChild(botIndicator);
+                }
+
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+
+                // Scroll al final
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Event listeners para el botón del chat
+            chatBotToggle.addEventListener('click', function() {
+                chatContainer.classList.toggle('active');
+                if (chatContainer.classList.contains('active')) {
+                    messageInput.focus();
+                }
+            });
+
+            chatClose.addEventListener('click', function() {
+                chatContainer.classList.remove('active');
+            });
+
+            // Enviar mensaje con botón o Enter
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Enfoque en el input al cargar
+            setTimeout(() => {
+                if (chatContainer.classList.contains('active')) {
+                    messageInput.focus();
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>

@@ -1,84 +1,419 @@
-<!-- plantillas/chatbot.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Fútbol API</title>
+    <title>Chatbot Oficial ADIDAS Fútbol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+        :root {
+            --adidas-black: #000000;
+            --adidas-gray: #f5f5f5;
+            --adidas-accent: #00a1e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .chat-container {
+            width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 20px;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
+            transform-origin: center;
+            animation: fadeIn 0.5s ease-out;
         }
+
         .chat-header {
-            background: #4a76a8;
+            background: var(--adidas-black);
             color: white;
-            padding: 15px;
+            padding: 20px 15px;
             text-align: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        .chat-header h2 {
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
         .chat-messages {
-            height: 400px;
+            height: 450px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            background-image: url('/api/placeholder/600/450');
+            background-blend-mode: overlay;
+            background-size: cover;
+            scroll-behavior: smooth;
         }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
         .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
+            margin-bottom: 20px;
+            padding: 12px 18px;
             border-radius: 20px;
-            max-width: 70%;
+            max-width: 75%;
             clear: both;
+            position: relative;
+            animation-duration: 0.4s;
         }
+
         .user-message {
-            background-color: #e3f2fd;
+            background: linear-gradient(120deg, var(--adidas-black), #333);
+            color: white;
             float: right;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transform-origin: bottom right;
+            animation: bounceIn 0.5s;
         }
+
         .bot-message {
-            background-color: #f1f1f1;
+            background-color: white;
             float: left;
+            border-bottom-left-radius: 4px;
+            border-left: 3px solid var(--adidas-accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transform-origin: bottom left;
+            animation: fadeInLeft 0.5s;
         }
+
+        .bot-message::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -15px;
+            width: 12px;
+            height: 30px;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
         .input-area {
             display: flex;
-            padding: 10px;
-            border-top: 1px solid #ddd;
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background-color: white;
+            align-items: center;
+            position: relative;
         }
+
         #message-input {
             flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 15px 20px;
+            border: 2px solid #eee;
+            border-radius: 30px;
             margin-right: 10px;
+            font-size: 15px;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
         }
+
+        #message-input:focus {
+            border-color: var(--adidas-black);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
         #send-button {
-            background: #4a76a8;
+            background: var(--adidas-black);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 15px 25px;
+            border-radius: 30px;
             cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        #send-button:hover {
+            background: var(--adidas-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        #send-button:active {
+            transform: translateY(1px);
+        }
+
+        .send-icon {
+            margin-left: 8px;
+        }
+
+        .three-stripes {
+            display: inline-block;
+            width: 30px;
+            height: 18px;
+            position: relative;
+            margin-right: 10px;
+            transform: skewX(-10deg);
+        }
+
+        .stripe {
+            position: absolute;
+            width: 6px;
+            height: 18px;
+            background: white;
+            transform: skewX(20deg);
+            transition: all 0.3s;
+        }
+
+        .stripe:nth-child(1) {
+            left: 0;
+        }
+
+        .stripe:nth-child(2) {
+            left: 12px;
+        }
+
+        .stripe:nth-child(3) {
+            left: 24px;
+        }
+
+        .header-stripes:hover .stripe {
+            transform: skewX(0deg) scaleY(1.2);
+        }
+
+        .bot-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            font-weight: 500;
+        }
+
+        /* Animación para el typing indicator */
+        .typing-indicator {
+            display: none;
+            padding: 15px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            margin-bottom: 20px;
+            float: left;
+            animation: fadeIn 0.5s;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .typing-indicator span {
+            height: 10px;
+            width: 10px;
+            background: var(--adidas-black);
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Animación para el botón flotante de productos destacados */
+        .featured-button {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: var(--adidas-accent);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        .featured-button:hover {
+            animation: none;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 161, 224, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 161, 224, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 161, 224, 0); }
+        }
+
+        /* Productos destacados panel */
+        .featured-products {
+            display: none;
+            position: absolute;
+            bottom: 140px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            width: 250px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 5;
+            transform-origin: bottom right;
+            animation: zoomIn 0.3s;
+        }
+
+        .featured-products h3 {
+            margin-top: 0;
+            font-size: 14px;
+            color: var(--adidas-black);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            background: #f5f5f5;
+            padding-left: 5px;
+        }
+
+        .product-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 12px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .product-category {
+            font-size: 10px;
+            color: #777;
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Chatbot Fútbol API</h2>
+            <h2>
+                <div class="three-stripes header-stripes">
+                    <div class="stripe"></div>
+                    <div class="stripe"></div>
+                    <div class="stripe"></div>
+                </div>
+                ADIDAS FÚTBOL CHAT
+            </h2>
         </div>
         <div class="chat-messages" id="chat-messages">
-            <!-- Los mensajes aparecerán aquí -->
+            <!-- Mensajes del chat aparecerán aquí -->
+            <div class="typing-indicator" id="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
+
+        <button class="featured-button" id="featured-button">
+            <i class="fas fa-fire"></i>
+        </button>
+
+        <div class="featured-products" id="featured-products">
+            <h3>PRODUCTOS DESTACADOS</h3>
+            <div class="product-item">
+                <img src="https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_400,w_400/lam_ss25_football_wayfinding_predator_d_04d812ed7e.jpg" alt="Bota X Speedportal">
+                <div class="product-info">
+                    <p class="product-name">X Speedportal</p>
+                    <p class="product-category">Botas de Fútbol</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/d79cfe57d6ac47beb3e8159e67526eb3_9366/guayos-f50-league-pasto-sintetico.jpg" alt="Zapatillas Predator">
+                <div class="product-info">
+                    <p class="product-name">Zapatillas Predator</p>
+                    <p class="product-category">Balones Oficiales</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/bba09c80cdf3416c9957d5ea0dee0738_9366/Camiseta_Local_Real_Madrid_24-25_Blanco_IU5011_HM1.jpg" alt="Camiseta Real Madrid">
+                <div class="product-info">
+                    <p class="product-name">Camiseta Real Madrid</p>
+                    <p class="product-category">Equipaciones</p>
+                </div>
+            </div>
+        </div>
+
         <div class="input-area">
-            <input type="text" id="message-input" placeholder="Escribe tu mensaje aquí...">
-            <button id="send-button">Enviar</button>
+            <input type="text" id="message-input" placeholder="Pregúntame sobre productos Adidas, equipos patrocinados, tecnologías...">
+            <button id="send-button">
+                Enviar
+                <i class="fas fa-paper-plane send-icon"></i>
+            </button>
         </div>
     </div>
 
@@ -88,21 +423,79 @@
             const chatMessages = document.getElementById('chat-messages');
             const messageInput = document.getElementById('message-input');
             const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const featuredButton = document.getElementById('featured-button');
+            const featuredProducts = document.getElementById('featured-products');
+
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                addMessage('¡Hola! Soy el asistente virtual de Adidas Fútbol. ¿En qué puedo ayudarte hoy? Puedes preguntarme sobre nuestros productos, tecnologías, equipos patrocinados o consejos futbolísticos.', 'bot');
+            }, 800);
 
             // Conectar al WebSocket
-           const chatSocket = new WebSocket(
-    (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + userId + '/'
-);
+            let chatSocket;
+            try {
+                chatSocket = new WebSocket(
+                    (window.location.protocol === 'https:' ? 'wss://' : 'ws://') +
+                    window.location.host +
+                    '/ws/chat/' + userId + '/'
+                );
+            } catch (e) {
+                console.log('Simulando conexión WebSocket para demo');
+                chatSocket = {
+                    send: function(msg) {
+                        console.log('Mensaje enviado (demo):', msg);
+                        const userMessage = JSON.parse(msg).message.toLowerCase();
 
+                        // Mostrar indicador de escritura
+                        showTypingIndicator();
+
+                        // Simular respuesta del bot después de un tiempo aleatorio
+                        setTimeout(() => {
+                            hideTypingIndicator();
+
+                            // Respuestas pre-programadas para demo
+                            if (userMessage.includes('hola') || userMessage.includes('buenas')) {
+                                addMessage('¡Hola! ¿En qué puedo ayudarte hoy? Estoy aquí para resolver todas tus dudas sobre productos Adidas para fútbol.', 'bot');
+                            } else if (userMessage.includes('botas') || userMessage.includes('calzado')) {
+                                addMessage('Nuestras líneas principales de botas son: Predator para control, X para velocidad y Copa para toque. ¿Sobre cuál te gustaría saber más?', 'bot');
+                            } else if (userMessage.includes('predator')) {
+                                addMessage('Las Predator son nuestras botas diseñadas para el control total. Su tecnología Controlframe proporciona estabilidad, mientras que las zonas texturizadas mejoran el contacto con el balón. Perfectas para mediocampistas.', 'bot');
+                            } else if (userMessage.includes('balon') || userMessage.includes('pelota')) {
+                                addMessage('Nuestro último balón oficial es el Al Rihla, diseñado para el Mundial 2022. Cuenta con tecnología CTR-CORE para precisión y SPEEDSHELL para aerodinámica mejorada.', 'bot');
+                            } else if (userMessage.includes('camiseta') || userMessage.includes('equipacion')) {
+                                addMessage('Contamos con equipaciones oficiales para clubes como Real Madrid, Manchester United, Bayern Munich, Juventus y selecciones como España, Alemania y Argentina. ¿De qué equipo te gustaría ver la camiseta?', 'bot');
+                            } else if (userMessage.includes('tecnologia') || userMessage.includes('innovacion')) {
+                                addMessage('Entre nuestras tecnologías destacan AEROREADY para gestión de la humedad, HEAT.RDY para refrigeración en condiciones de calor y PRIMEKNIT para materiales ultraligeros y flexibles.', 'bot');
+                            } else {
+                                addMessage('Gracias por tu pregunta. Para darte la mejor información, ¿podrías especificar si quieres saber sobre botas, equipaciones, balones o accesorios de fútbol?', 'bot');
+                            }
+                        }, Math.random() * 1000 + 1000);
+                    }
+                };
+            }
 
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
+                hideTypingIndicator();
                 addMessage(data.message, data.sender);
             };
 
             chatSocket.onclose = function(e) {
                 console.error('Chat socket closed unexpectedly');
+                addMessage('La conexión se ha interrumpido. Por favor, recarga la página.', 'bot');
             };
+
+            // Función para mostrar el indicador de escritura
+            function showTypingIndicator() {
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Función para ocultar el indicador de escritura
+            function hideTypingIndicator() {
+                typingIndicator.style.display = 'none';
+            }
 
             // Función para enviar mensaje
             function sendMessage() {
@@ -119,13 +512,45 @@
 
                 // Limpiar input
                 messageInput.value = '';
+
+                // Mostrar indicador de escritura
+                showTypingIndicator();
             }
 
             // Función para añadir mensaje a la interfaz
             function addMessage(message, sender) {
+                // Ocultar indicador de escritura
+                hideTypingIndicator();
+
+                if (sender === 'bot') {
+                    const botIndicator = document.createElement('div');
+                    botIndicator.classList.add('bot-indicator');
+
+                    const threeStripes = document.createElement('div');
+                    threeStripes.classList.add('three-stripes');
+                    threeStripes.style.transform = 'scale(0.7)';
+                    threeStripes.style.marginRight = '5px';
+
+                    for (let i = 0; i < 3; i++) {
+                        const stripe = document.createElement('div');
+                        stripe.classList.add('stripe');
+                        stripe.style.background = '#000';
+                        threeStripes.appendChild(stripe);
+                    }
+
+                    botIndicator.appendChild(threeStripes);
+
+                    const botText = document.createElement('span');
+                    botText.textContent = 'ADIDAS FÚTBOL';
+                    botIndicator.appendChild(botText);
+
+                    chatMessages.appendChild(botIndicator);
+                }
+
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
                 messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+                messageElement.classList.add(sender === 'user' ? 'animate__bounceIn' : 'animate__fadeInLeft');
                 messageElement.textContent = message;
 
                 chatMessages.appendChild(messageElement);
@@ -134,11 +559,41 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
+            // Manejar productos destacados
+            featuredButton.addEventListener('click', () => {
+                if (featuredProducts.style.display === 'block') {
+                    featuredProducts.style.display = 'none';
+                } else {
+                    featuredProducts.style.display = 'block';
+                }
+            });
+
+            // Manejar clics en productos
+            document.querySelectorAll('.product-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const productName = this.querySelector('.product-name').textContent;
+                    messageInput.value = `Me interesa saber más sobre ${productName}`;
+                    featuredProducts.style.display = 'none';
+                });
+            });
+
             // Event listeners
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     sendMessage();
+                }
+            });
+
+            // Enfoque en el input al cargar
+            setTimeout(() => {
+                messageInput.focus();
+            }, 1000);
+
+            // Simular clics en elementos para demostración
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'F1') {
+                    featuredButton.click();
                 }
             });
         });

@@ -26,7 +26,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Enviar mensaje de bienvenida
         await self.send(text_data=json.dumps({
-            'message': '¡Hola! Soy el chatbot de Fútbol API. ¿En qué puedo ayudarte?',
+            'message': '¡Hola! Soy el chatbot de Adidas. ¿En qué puedo ayudarte?',
             'sender': 'bot',
             'timestamp': self.get_timestamp()
         }))
