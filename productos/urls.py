@@ -1,15 +1,9 @@
-from django.urls import path, include
-
-
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import JugadorViewSet, MercadoViewSet
-
-router = DefaultRouter()
-router.register(r'productos', JugadorViewSet)
-router.register(r'mercado', MercadoViewSet, basename='mercado')
+from django.urls import path
+from productos.views import hombres_view, mujeres_view, ninos_view
 
 urlpatterns = [
-    path('', include(router.urls)),
 
+path('productos/hombres/', hombres_view),
+    path('productos/mujeres/', mujeres_view),
+    path('productos/ninos/', ninos_view),
 ]

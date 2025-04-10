@@ -344,9 +344,11 @@
                     <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
                     <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'niños' %}">Niños</a>
+                          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'registro' %}">Registrarse</a></li>
 
 
-                    </li>
+
 
 
                     <li class="nav-item">
@@ -449,7 +451,29 @@
         ];
 
 
+    window.onload = function() {
+            const productosContainer = document.getElementById("productos");
+            productos.forEach(function(producto) {
+                const productoDiv = document.createElement("div");
+                productoDiv.classList.add("producto");
 
+                const imagen = document.createElement("img");
+                imagen.src = producto.img;
+                imagen.alt = producto.nombre;
+
+                const nombre = document.createElement("h2");
+                nombre.textContent = producto.nombre;
+
+                const precio = document.createElement("p");
+                precio.textContent = `Precio: $${producto.precio}`;
+
+                productoDiv.appendChild(imagen);
+                productoDiv.appendChild(nombre);
+                productoDiv.appendChild(precio);
+
+                productosContainer.appendChild(productoDiv);
+            });
+        };
 
 
         let carrito = [];
