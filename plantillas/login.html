@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Adidas Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 400px;
+            padding: 40px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 80px;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: #000;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #000;
+            color: white;
+            border: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .three-stripes {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .stripe {
+            width: 30px;
+            height: 5px;
+            margin: 0 3px;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="data:image/png;base64,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" alt="Adidas Logo">
+        </div>
+
+        <div class="three-stripes">
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+        </div>
+
+        <h1>Iniciar sesión</h1>
+
+        <div id="error-message" class="error-message"></div>
+
+        <form id="login-form" method="post" action="/login/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit">Iniciar sesión</button>
+        </form>
+
+        <div class="links">
+            <a href="/registro/">¿No tienes cuenta? Regístrate aquí</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Enviar datos al servidor usando fetch
+            fetch('/api/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/inicio';
+                } else {
+                    document.getElementById('error-message').textContent = data.message || 'Usuario o contraseña incorrectos';
+                }
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = 'Error al conectar con el servidor';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
