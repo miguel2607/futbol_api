@@ -1,20 +1,24 @@
 from django.shortcuts import render
-# productos/views.py
-from django.http import JsonResponse
 from .models import ProductoHombre, ProductoMujer, ProductoNino
 
 def hombres_view(request):
-    productos = list(ProductoHombre.objects.values())
-    return JsonResponse(productos, safe=False)
+    productos = ProductoHombre.objects.all()
+    return render(request, 'hombres.html', {'productos': productos})
 
 def mujeres_view(request):
-    productos = list(ProductoMujer.objects.values())
-    return JsonResponse(productos, safe=False)
+    productos = ProductoMujer.objects.all()
+    return render(request, 'mujeres.html', {'productos': productos})
 
 def ninos_view(request):
-    productos = list(ProductoNino.objects.values())
-    return JsonResponse(productos, safe=False)
+    productos = ProductoNino.objects.all()
+    return render(request, 'niños.html', {'productos': productos})
 
+
+
+def pago_tarjeta(request):
+    return render(request,'PagoTarjeta.html')
+def chatbot_page(request):
+    return render(request, "chatbot.html")
 
 def pago_tarjeta(request):
     return render(request,'PagoTarjeta.html')
