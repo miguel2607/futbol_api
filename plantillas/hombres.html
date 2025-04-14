@@ -1,3 +1,5 @@
+{% load json_script %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -332,6 +334,7 @@
         }
     </style>
 </head>
+<script>const productos = {{ productos_json|safe }};</script>
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
@@ -367,9 +370,13 @@
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Productos Adidas Hombres</h2>
-        <div class="row" id="productos-container"></div>
+        <div class="row" id="productos-container">
+            {% for producto in productos %}
+                {% include 'product_card.html' with producto=producto %}
+            {% endfor %}
+        </div>
     </div>
-
+    
     <!-- Modal del Carrito -->
     <div class="cart-modal" id="cart-modal">
         <div class="cart-content">
@@ -432,49 +439,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Datos de productos
-        const productos = [
-            { id: 1, nombre: "Zapatillas Predator", precio: 1500, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/d79cfe57d6ac47beb3e8159e67526eb3_9366/guayos-f50-league-pasto-sintetico.jpg" },
-            { id: 2, nombre: "Camiseta Deportiva", precio: 600, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c40a281ad049448493a681238c71893d_9366/Camiseta_de_Entrenamiento_Designed_for_Training_Blanco_IS3808_21_model.jpg" },
-            { id: 3, nombre: "Pantalón de Entrenamiento", precio: 750, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e2e58bef9ed046958e34fac3d198bf67_9366/Pantalon_Deportivo_Adicolor_Classics_Beckenbauer_Azul_IP0421_21_model.jpg" },
-            { id: 4, nombre: "Sudadera Negra", precio: 850, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/8cc8c51aa1284b83938a848cf3f15872_9366/Pantalon_Z.N.E._Negro_JD5983_21_model.jpg" },
-            { id: 5, nombre: "Chamarra Deportiva", precio: 120, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2c0bed92b1174078b959ae5300eb0c29_9366/Sudadera_Ajustada_con_Cierre_Negro_HI5401_01_laydown.jpg" },
-            { id: 6, nombre: "Mochila Adidas", precio: 500, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c044001d3f2649db9d0345596248bebb_9366/Morral_Classics_Back_To_School_Negro_IX7989_01_standard.jpg" },
-            { id: 7, nombre: "Camiseta Millonarios FC", precio: 500, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/3da99393e5294a1fab1681dd60425ac1_9366/Camiseta_Local_Millonarios_FC_2025_Azul_KB3185_01_laydown.jpg" },
-              { id: 8, nombre: "Zapatos Negros Superstar", precio: 700, img: "https://assets.adidas.com/images/w_600,f_auto,q_auto/07e59764e9f840da97a6b47bf6a25cce_9366/Tenis_Superstar_x_Felipe_Negro_JR7831_00_plp_standard.jpg" },
-               { id: 9, nombre: "Predator", precio: 750, img: "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4df24bfaad4a40c0a0ff396b9f73f6c2_9366/Guayos_Predator_League_Sin_Cordones_Firm-Multi-Terreno_Rojo_ID3859_HM3_hover.jpg" },
-                { id: 10, nombre: "Guantes Predator", precio: 250, img: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/87b8d139ffcc4cd5954dc62d756693a4_9366/guantes-de-arquero-predator-league.jpg" },
-                 { id: 11, nombre: "Zapatillas Adidas XYZ", precio: 120, img: "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_400,w_400/lam_ss25_football_wayfinding_predator_d_04d812ed7e.jpg" },
-                  { id: 12, nombre: "Camiseta Real Madrid", precio: 140, img: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/bba09c80cdf3416c9957d5ea0dee0738_9366/Camiseta_Local_Real_Madrid_24-25_Blanco_IU5011_HM1.jpg" },
-
-
-        ];
-
-
-    window.onload = function() {
-            const productosContainer = document.getElementById("productos");
-            productos.forEach(function(producto) {
-                const productoDiv = document.createElement("div");
-                productoDiv.classList.add("producto");
-
-                const imagen = document.createElement("img");
-                imagen.src = producto.img;
-                imagen.alt = producto.nombre;
-
-                const nombre = document.createElement("h2");
-                nombre.textContent = producto.nombre;
-
-                const precio = document.createElement("p");
-                precio.textContent = `Precio: $${producto.precio}`;
-
-                productoDiv.appendChild(imagen);
-                productoDiv.appendChild(nombre);
-                productoDiv.appendChild(precio);
-
-                productosContainer.appendChild(productoDiv);
-            });
-        };
-
 
         let carrito = [];
 
@@ -482,31 +446,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             cargarCarritoDesdeLocalStorage();
             mostrarProductos();
+
             actualizarContadorCarrito();
-            initChatbot();
+            
         });
 
         // Funciones del carrito
         function mostrarProductos() {
-            const container = document.getElementById("productos-container");
-            container.innerHTML = "";
-            productos.forEach((producto) => {
-                container.innerHTML += `
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <img src="${producto.img}" class="card-img-top" alt="${producto.nombre}">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">${producto.nombre}</h5>
-                                <p class="price">$${producto.precio.toFixed(2)}</p>
-                                <button class="btn btn-comprar" onclick="agregarAlCarrito(${producto.id})">Agregar al Carrito</button>
-                            </div>
-                        </div>
-                    </div>`;
-            });
+            const productos = JSON.parse('{{ productos_json|safe }}');
         }
 
         function agregarAlCarrito(id) {
-            const producto = productos.find(p => p.id === id);
             const productoExistente = carrito.find(item => item.id === id);
 
             if (productoExistente) {
@@ -622,7 +572,7 @@
         }
 
         // Código del Chatbot
-   document.addEventListener('DOMContentLoaded', () => {
+    
             // Elementos del chat
             const chatBotToggle = document.getElementById('chatBotToggle');
             const chatContainer = document.getElementById('chatContainer');
@@ -771,7 +721,8 @@
                     messageInput.focus();
                 }
             }, 1000);
-        });
+        
+        
     </script>
 </body>
 </html>
