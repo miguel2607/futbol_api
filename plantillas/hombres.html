@@ -1,93 +1,85 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Catálogo Adidas Mujeres</title>
+    <title>Catálogo Adidas Hombres</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f8f9fa; }
-        .navbar { background-color: #000; }
-        .navbar-brand img { width: 100px; }
-        .navbar-nav .nav-link { color: #fff !important; }
-        .cart-icon { color: white; font-size: 1.5rem; }
-        .cart-count { background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.8rem; }
-        .card { border: none; transition: transform 0.3s; }
-        .card:hover { transform: scale(1.05); }
-        .price { color: #28a745; font-weight: bold; }
-        .btn-comprar { background-color: #000; color: white; border-radius: 20px; width: 100%; }
-
-        /* Estilos del carrito */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
+        /* Estilos Generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
         }
-        .cart-content {
-            background: white;
-            width: 90%;
-            max-width: 600px;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 10px;
+
+        /* Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+        }
+
+        .navbar-brand img {
+            width: 100px;
+            transition: transform 0.3s;
+        }
+
+        .navbar-brand img:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
             position: relative;
         }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .cart-item img {
-            width: 60px;
-            height: auto;
-            margin-right: 15px;
-            border-radius: 5px;
-        }
-        .cart-item-details {
-            flex-grow: 1;
-        }
-        .cart-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .cart-total {
-            margin: 15px 0;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: right;
-        }
-        .empty-cart-message {
-            text-align: center;
-            padding: 20px;
-            color: #6c757d;
-        }
-        .remove-item {
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 10px;
+
+        .navbar-nav .nav-link:hover {
+            color: #3FC3D5 !important;
         }
 
-        /* Banner */
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #3FC3D5;
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            position: relative;
+            top: -10px;
+            right: 5px;
+        }
+
+       /* Banner */
         .banner {
             background: url('https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_1920,w_1920/CONTENT_adi_Club_Benefits_STATEMENT_BANNER_DT_3_f216e0df87.jpg') no-repeat center center/cover;
             height: 300px;
@@ -101,28 +93,213 @@
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
 
+        /* Productos */
+        .container.mt-5 {
+            padding: 0 15px;
+        }
+
+        .card {
+            border: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .btn-comprar {
+            background-color: #000;
+            color: white;
+            border-radius: 20px;
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-comprar:hover {
+            background-color: #3FC3D5;
+            transform: translateY(-2px);
+        }
+
+        .btn-comprar:active {
+            transform: translateY(0);
+        }
+
+        /* Carrito */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .cart-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details div {
+            margin-bottom: 5px;
+        }
+
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .cart-total {
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-align: right;
+            color: #000;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .remove-item {
+            color: #dc3545;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .remove-item:hover {
+            transform: scale(1.2);
+        }
+
         /* Footer */
         .footer {
             background-color: #000;
             color: white;
-            padding: 20px 0;
+            padding: 40px 0 20px;
             text-align: center;
+            margin-top: 60px;
         }
+
         .social-media {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
+
         .social-media a {
             color: #fff;
             font-size: 24px;
             margin: 0 15px;
             text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .social-media a:hover {
-            color: #3FC3D5;
+            transition: color 0.3s ease, transform 0.3s;
+            display: inline-block;
         }
 
-        /* Estilos del Chatbot */
+        .social-media a:hover {
+            color: #3FC3D5;
+            transform: translateY(-3px);
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Chatbot */
         .chat-bot-toggle {
             position: fixed;
             bottom: 30px;
@@ -140,10 +317,12 @@
             border: none;
             transition: all 0.3s ease;
         }
+
         .chat-bot-toggle:hover {
             transform: scale(1.1);
             background: #00a1e0;
         }
+
         .chat-container {
             position: fixed;
             bottom: 100px;
@@ -157,10 +336,17 @@
             z-index: 999;
             display: none;
             flex-direction: column;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
         }
+
         .chat-container.active {
             display: flex;
+            transform: translateY(0);
+            opacity: 1;
         }
+
         .chat-header {
             background: #000;
             color: white;
@@ -169,12 +355,14 @@
             position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
         .chat-header h2 {
             margin: 0;
             font-weight: 700;
             font-size: 1.2rem;
             letter-spacing: 1px;
         }
+
         .chat-close {
             position: absolute;
             right: 15px;
@@ -185,9 +373,11 @@
             font-size: 18px;
             transition: color 0.3s;
         }
+
         .chat-close:hover {
             color: #00a1e0;
         }
+
         .chat-messages {
             height: 350px;
             overflow-y: auto;
@@ -196,14 +386,19 @@
             flex-grow: 1;
             scroll-behavior: smooth;
         }
+
         .message {
             margin-bottom: 15px;
-            padding: 10px 15px;
+            padding: 12px 16px;
             border-radius: 20px;
             max-width: 75%;
             clear: both;
             position: relative;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
         }
+
         .user-message {
             background: linear-gradient(120deg, #000, #333);
             color: white;
@@ -211,6 +406,7 @@
             border-bottom-right-radius: 4px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
+
         .bot-message {
             background-color: white;
             float: left;
@@ -218,6 +414,7 @@
             border-left: 3px solid #00a1e0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
+
         .bot-indicator {
             display: flex;
             align-items: center;
@@ -227,6 +424,7 @@
             padding-left: 5px;
             font-weight: 500;
         }
+
         .typing-indicator {
             display: none;
             padding: 12px;
@@ -238,6 +436,7 @@
             position: relative;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
+
         .typing-indicator span {
             height: 8px;
             width: 8px;
@@ -247,20 +446,25 @@
             margin: 0 2px;
             animation: typing 1s infinite ease-in-out;
         }
+
         .typing-indicator span:nth-child(1) {
             animation-delay: 0.1s;
         }
+
         .typing-indicator span:nth-child(2) {
             animation-delay: 0.2s;
         }
+
         .typing-indicator span:nth-child(3) {
             animation-delay: 0.3s;
         }
+
         @keyframes typing {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-6px); }
             100% { transform: translateY(0px); }
         }
+
         .input-area {
             display: flex;
             padding: 15px;
@@ -268,9 +472,10 @@
             background-color: white;
             align-items: center;
         }
+
         #message-input {
             flex-grow: 1;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: 2px solid #eee;
             border-radius: 30px;
             margin-right: 10px;
@@ -279,10 +484,12 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             transition: all 0.3s;
         }
+
         #message-input:focus {
             border-color: #000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+
         #send-button {
             background: #000;
             color: white;
@@ -297,16 +504,20 @@
             justify-content: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
+
         #send-button:hover {
             background: #00a1e0;
             transform: translateY(-2px);
         }
+
         #send-button:active {
             transform: translateY(1px);
         }
+
         .send-icon {
             margin-left: 5px;
         }
+
         .three-stripes {
             display: inline-block;
             width: 30px;
@@ -315,6 +526,7 @@
             margin-right: 10px;
             transform: skewX(-10deg);
         }
+
         .stripe {
             position: absolute;
             width: 6px;
@@ -323,18 +535,55 @@
             transform: skewX(20deg);
             transition: all 0.3s;
         }
+
         .stripe:nth-child(1) {
             left: 0;
         }
+
         .stripe:nth-child(2) {
             left: 12px;
         }
+
         .stripe:nth-child(3) {
             left: 24px;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .banner {
+                height: 200px;
+                font-size: 1.8rem;
+            }
+
+            .cart-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .chat-container {
+                width: 90%;
+                right: 5%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand img {
+                width: 80px;
+            }
+
+            .card-img-top {
+                height: 200px;
+            }
+
+            .chat-bot-toggle {
+                width: 55px;
+                height: 55px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
-<script>const productos = {{ productos_json|safe }};</script>
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
@@ -346,14 +595,9 @@
                 <ul class="navbar-nav ms-auto">
                     <li><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
                     <li><a class="nav-link" href="{% url 'mujeres' %}">Mujeres</a></li>
-                     <li ><a class="nav-link"  href="{% url 'ninos' %}"> Niños</a></li>
-                          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'registro' %}">Registrarse</a></li>
-
-
-
-
-
+                    <li><a class="nav-link" href="{% url 'ninos' %}">Niños</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'registro' %}">Registrarse</a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="verCarrito()">
                             <i class="bi bi-cart cart-icon"></i> <span id="cart-count" class="cart-count">0</span>
@@ -372,11 +616,31 @@
         <h2 class="text-center mb-4">Productos Adidas Hombres</h2>
         <div class="row" id="productos-container">
             {% for producto in productos %}
-                {% include 'product_card.html' with producto=producto %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen no disponible" style="height: 250px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">{{ producto.descripcion|truncatechars:100 }}</p>
+                        <p class="price">${{ producto.precio }}</p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <button class="btn btn-comprar" onclick="agregarAlCarrito({{ producto.id }})">Agregar al Carrito</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">No hay productos disponibles en este momento</div>
+            </div>
             {% endfor %}
         </div>
     </div>
-    
+
     <!-- Modal del Carrito -->
     <div class="cart-modal" id="cart-modal">
         <div class="cart-content">
@@ -422,6 +686,7 @@
         <div class="chat-messages" id="chatMessages">
             <div class="bot-indicator">ADIDAS BOT</div>
 
+
             <div class="typing-indicator" id="typingIndicator">
                 <span></span>
                 <span></span>
@@ -439,35 +704,66 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-
+        // Variables globales
         let carrito = [];
+        let productos = [];
 
-        // Cargar carrito desde localStorage al iniciar
+        // Cargar datos al iniciar
         document.addEventListener('DOMContentLoaded', function() {
-            cargarCarritoDesdeLocalStorage();
-            mostrarProductos();
+            // Convertir los productos de Django a JavaScript
+            try {
+                const productosData = '{{ productos_json|safe }}';
+                productos = productosData ? JSON.parse(productosData) : [];
 
+                if (!Array.isArray(productos)) {
+                    console.warn("Los productos no son un array, convirtiendo a array");
+                    productos = [];
+                }
+            } catch (error) {
+                console.error("Error al cargar productos:", error);
+                productos = [];
+            }
+
+            cargarCarritoDesdeLocalStorage();
             actualizarContadorCarrito();
-            
+            initChatbot();
         });
 
-        // Funciones del carrito
-        function mostrarProductos() {
-            const productos = JSON.parse('{{ productos_json|safe }}');
-        }
-
+        // Función para agregar al carrito (corregida)
         function agregarAlCarrito(id) {
+            const producto = productos.find(p => p.id === id);
+            if (!producto) {
+                console.error("Producto no encontrado con ID:", id);
+                return;
+            }
+
             const productoExistente = carrito.find(item => item.id === id);
 
             if (productoExistente) {
                 productoExistente.cantidad = (productoExistente.cantidad || 1) + 1;
             } else {
-                carrito.push({...producto, cantidad: 1});
+                // Manejo correcto de la imagen del producto
+                let imagenUrl = 'https://via.placeholder.com/300';
+                if (producto.imagen) {
+                    // Verifica si la imagen es un objeto con propiedad url o directamente la URL
+                    imagenUrl = producto.imagen.url || producto.imagen;
+                } else if (producto.imagen_url) {
+                    imagenUrl = producto.imagen_url;
+                }
+
+                carrito.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: parseFloat(producto.precio),
+                    img: imagenUrl,
+                    cantidad: 1
+                });
             }
 
             guardarCarritoEnLocalStorage();
             actualizarContadorCarrito();
 
+            // Feedback visual
             const btnComprar = event.target;
             btnComprar.innerHTML = "¡Añadido!";
             btnComprar.classList.add("btn-success");
@@ -567,12 +863,17 @@
         function cargarCarritoDesdeLocalStorage() {
             const carritoGuardado = localStorage.getItem('carritoAdidas');
             if (carritoGuardado) {
-                carrito = JSON.parse(carritoGuardado);
+                try {
+                    carrito = JSON.parse(carritoGuardado);
+                } catch (error) {
+                    console.error("Error al cargar carrito:", error);
+                    carrito = [];
+                }
             }
         }
 
-        // Código del Chatbot
-    
+         // Código del Chatbot
+
             // Elementos del chat
             const chatBotToggle = document.getElementById('chatBotToggle');
             const chatContainer = document.getElementById('chatContainer');
@@ -721,8 +1022,6 @@
                     messageInput.focus();
                 }
             }, 1000);
-        
-        
     </script>
 </body>
 </html>
